@@ -1,8 +1,10 @@
 'strict';
 
+var Collection = require('streamhub-sdk/collection');
 var EventEmitter = require('event-emitter');
+var inherits = require('inherits')
 var log = require('streamhub-sdk/debug')
-        ('streahub-permalink');
+        ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter')
 var util = require('streamhub-sdk/util');
 
@@ -15,20 +17,26 @@ var util = require('streamhub-sdk/util');
  * Implementers can specify default handlers per item key using the default(key, fn) method. Apps
  * can call Permalink.prevent(key) to prevent Permalink from automatically executing the default
  * for a given key.
- * @param [opts] {Object=}
  * @constructor
  * @extends {EventEmitter}
  */
-var Permalink = function (opts) {
+var Permalink = function () {
     EventEmitter.call(this);
     //
     this._warehouse = {};
-    //TODO (joao) opts?
 
-    //TODO (joao) Check the URI for stuff
-    uriInterpreter.getContentPermalink();
-
-    //TODO (joao) Get stuff
+    // (joao) This was how I prototyped it, but I prefer iterating through a list.
+    // switch (true) {
+    //     case Boolean(uriInterpreter.getContentPermalink()):
+    //         var content = uriInterpreter.getContentPermalink().split(':');
+    //         this._getContent.apply(this, content);
+    //         break;
+    // }
+    
+    var self = this;
+    Permalink.ITEMS.forEach(function (fn) {
+        fn.call(self);
+    });
 };
 inherits(Permalink, EventEmitter);
 
@@ -36,9 +44,20 @@ inherits(Permalink, EventEmitter);
  * Keys for the different types of permalinkable Livefyre items.
  * @type {Object.<string, string>}
  */
-Permalink.KEYS {
+Permalink.KEYS = {
     CONTENT: 'content'
 };
+
+Permalink.ITEMS = [
+    function () {
+        var content = uriInterpreter.getContentPermalink();
+        if (!content) {
+            return false;
+        }
+        content = content.split(':');
+        this._getContent.apply(this, content);
+    }
+]
 
 /**
  * A place for storing things in dictionary fassion.
@@ -117,7 +136,7 @@ Permalink.prototype._set = function (key, item) {
  */
 Permalink.prototype.prevent = function (key) {
     if (!key) {
-        log 'Attempted to .prevent without key';
+        log('Attempted to .prevent without key');
         return;
     }
 
@@ -136,7 +155,7 @@ Permalink.prototype.prevent = function (key) {
  */
 Permalink.prototype.get = function (key) {
     //TODO (joao) Maybe return a copy of an object instead of a reference to the original?
-    return this._warehouse[key];
+    return key && this._warehouse[key];
 };
 
 /**
@@ -150,7 +169,7 @@ Permalink.prototype.get = function (key) {
  */
 Permalink.prototype.default = function (key, fn, context, args) {
     if (!key || !fn) {
-        log 'Attempted to .default without key or function';
+        log('Attempted to .default without key or function');
         return this._generateDefaulHandler();
     }
 
@@ -163,13 +182,36 @@ Permalink.prototype.default = function (key, fn, context, args) {
  * Gets Content from the server and places it in the warehouse under the CONTENT key.
  * @private
  */
-permalink.prototype._getContent = function (collectionId, contentId) {
-    var item,
-        collection;
+Permalink.prototype._getContent = function (collectionId, contentId) {
+    var callback,
+        collection,
+        opts;
+    //?lf-content=10772933:26482715
+    opts = {
+        "id" : collectionId,
+        "network": "livefyre.com",
+        "environment": "t402.livefyre.com"
+    };
 
-    //TODO (joao) Use the content fetcher to asyncronously get and set item
+    collection = new Collection(opts);
+    callback = this._generateContentHandler(this);
+    collection.fetchContent(contentId, callback);
+};
 
-    // this._set('content', item);
+/**
+ * Generates a handler function for content. Used by collection.fetchContent in this._getContent.
+ * @param self {!Object} The 'this' object.
+ * @return {!function(err: Object, data: Object)} A callback function
+ */
+Permalink.prototype._generateContentHandler = function(self) {
+    return function(err, content) {
+        if (err) {
+            log('Error fetching permalink content: ' + err);
+            return;
+        }
+
+        self._set('content', content);
+    };
 };
 
 module.exports = Permalink;

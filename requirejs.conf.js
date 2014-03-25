@@ -2,6 +2,7 @@ require.config({
   paths: {
     jquery: 'lib/jquery/jquery',
     text: 'lib/requirejs-text/text',
+    base64: 'lib/base64/base64.min',
     hogan: 'lib/hogan/web/builds/2.0.0/hogan-2.0.0.amd',
     hgn: 'lib/requirejs-hogan-plugin/hgn',
     json: 'lib/requirejs-plugins/src/json',
@@ -10,12 +11,17 @@ require.config({
     inherits: 'lib/inherits/inherits',
     blanket: 'lib/blanket/dist/qunit/blanket',
     'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine',
-    uri: 'lib/uri/src/URI.js',
-    purl: 'lib/purl/purl.js'
+    purl: 'lib/purl/purl'
   },
   packages: [{
+    name: 'stream',
+    location: 'lib/stream/src'
+  },{
     name: 'streamhub-permalink',
     location: 'src'
+  },{
+    name: 'streamhub-sdk',
+    location: 'lib/streamhub-sdk/src'
   },{
     name: 'streamhub-sdk/auth',
     location: 'lib/streamhub-sdk/src/auth'

@@ -4,7 +4,7 @@ var $ = require('jquery');
 var log = require('streamhub-sdk/debug')
         ('streahub-permalink');
 var purl = require('purl');
-var uri = require('uri');
+// var uri = require('uri');
 var util = require('streamhub-sdk/util');
 
 /**
@@ -13,25 +13,12 @@ var util = require('streamhub-sdk/util');
 var uriInterpreter = {};
 
 uriInterpreter.FIELDS = {
-    PERMACONTENT = "lf-content"
+    PERMACONTENT: "lf-content"
 };
 
 uriInterpreter.getContentPermalink = function () {
+    //TODO (joao) Return a {collectionId, contentId} object
     return purl().param(uriInterpreter.FIELDS.PERMACONTENT);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = uriInterpreter;

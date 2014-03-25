@@ -5,12 +5,12 @@
     "./src/main.js"
   ],
   "dependencies": {
+    "base64": "git://github.com/ross-pfahler/Base64.js#~0.3.3",
     "cajon": "git://github.com/requirejs/cajon.git#~0.1.11",
     "requirejs": "2.1.9",
     "inherits": "git://github.com/Livefyre/inherits.git",
     "requirejs-hogan-plugin": "*",
     "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#her_fetch",
-    "uri": "git://github.com/medialize/URI.js.git#~1.12",
     "purl": "git://github.com/allmarkedup/purl.git#~2.3"
   },
   "devDependencies": {

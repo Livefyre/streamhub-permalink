@@ -8,7 +8,7 @@ describe('streamhub-permalink/uri-interpreter', function () {
             throw 'TODO (joao) Implement this!';
         });
 
-        it('returns an empty string when there isn\'t a "lf-content" field', function () {
+        it('returns undefined when there isn\'t a "lf-content" field', function () {
             throw 'TODO (joao) Implement this!';
         });
     });
