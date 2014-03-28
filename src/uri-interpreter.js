@@ -1,4 +1,4 @@
-'strict';
+'use strict';
 
 var $ = require('jquery');
 var log = require('streamhub-sdk/debug')

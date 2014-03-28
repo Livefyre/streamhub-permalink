@@ -1,4 +1,4 @@
-'strict';
+'use strict';
 
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 

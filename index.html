@@ -7,7 +7,7 @@
         /*width:500px;*/
     }
     </style>
-    <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+    <!--script type="text/javascript" src="//platform.twitter.com/widgets.js"></script-->
     
     <!--script src="//livefyre-cdn.s3.amazonaws.com/libs/sdk/v2.5.1/rc/builds/11/streamhub-sdk.min.js"></script-->
     <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
@@ -22,12 +22,13 @@
                 baseUrl: ""
             });
         </script-->
+        <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
         <script>
         HubPermalink.require([
             'streamhub-permalink'
         ],function (Permalink) {
             // http://localhost:8080/index.html?lf-content=10772933:26482715
-            var pl = new Permalink(),
+            var pl = Permalink.getInstance(),
                 key = Permalink.KEYS.CONTENT;
             pl.default(key, function(content) {
                 alert('Default handler for permalink content');
@@ -38,8 +39,8 @@
                 pl.on(key, function () {
                     content = pl.get(key);
                     alert('got "content" event');
-                    pl.get(key) && alert('can get(key)')
-                    // pl.prevent(key);
+                    pl.get(key) && alert('can get(key)');
+                    // pl.preventDefault(key);//Comment in to prevent the default handler
                 });
             } else {
                 alert('got content right away');

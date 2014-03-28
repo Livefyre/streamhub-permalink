@@ -7,6 +7,7 @@ require.config({
     hgn: 'lib/requirejs-hogan-plugin/hgn',
     json: 'lib/requirejs-plugins/src/json',
     jasmine: 'lib/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-html': 'lib/jasmine/lib/jasmine-core/jasmine-html',
     'event-emitter': 'lib/event-emitter/src/event-emitter',
     inherits: 'lib/inherits/inherits',
     blanket: 'lib/blanket/dist/qunit/blanket',

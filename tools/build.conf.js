@@ -7,7 +7,6 @@
   name: "streamhub-permalink",
   include: [
     'almond',
-    'streamhub-sdk',
     'streamhub-sdk/jquery',
     'streamhub-sdk/collection',
     'streamhub-sdk/content'
