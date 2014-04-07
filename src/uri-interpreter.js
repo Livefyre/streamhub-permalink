@@ -18,7 +18,7 @@ uriInterpreter.FIELDS = {
 
 uriInterpreter.getContentPermalink = function () {
     //TODO (joao) Return a {collectionId, contentId} object
-    return purl().param(uriInterpreter.FIELDS.PERMACONTENT);
+    return purl(document.location).param(uriInterpreter.FIELDS.PERMACONTENT);
 };
 
 module.exports = uriInterpreter;

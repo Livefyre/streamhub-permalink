@@ -24,14 +24,6 @@ var Permalink = function () {
     EventEmitter.call(this);
     //
     this._warehouse = {};
-
-    // (joao) This was how I prototyped it, but I prefer iterating through a list.
-    // switch (true) {
-    //     case Boolean(uriInterpreter.getContentPermalink()):
-    //         var content = uriInterpreter.getContentPermalink().split(':');
-    //         this._getContent.apply(this, content);
-    //         break;
-    // }
     
     var self = this;
     Permalink.ITEMS.forEach(function (fn) {
@@ -55,6 +47,10 @@ Permalink.ITEMS = [
             return false;
         }
         content = content.split(':');
+        if (content.length === 3) {
+            //Env was provided
+            content.push(content.shift());
+        }
         this._getContent.apply(this, content);
     }
 ]
@@ -154,7 +150,6 @@ Permalink.prototype.preventDefault = function (key) {
  * @returns {*=} The item in the warehouse or undefined.
  */
 Permalink.prototype.get = function (key) {
-    //TODO (joao) Maybe return a copy of an object instead of a reference to the original?
     return key && this._warehouse[key];
 };
 
@@ -178,20 +173,24 @@ Permalink.prototype.default = function (key, fn, context, args) {
     return dh;
 };
 
+
 /**
  * Gets Content from the server and places it in the warehouse under the CONTENT key.
+ * @param collectionId {!string} ID for the content's collection
+ * @param contentId {!string} ID for the content
+ * @param [env] {string=} For environments other than production
  * @private
  */
-Permalink.prototype._getContent = function (collectionId, contentId) {
+Permalink.prototype._getContent = function (collectionId, contentId, env) {
     var callback,
         collection,
         opts;
-    //?lf-content=10772933:26482715
+    //?lf-content=t402.livefyre.com:10772933:26482715
     opts = {
         "id" : collectionId,
-        "network": "livefyre.com",
-        "environment": "t402.livefyre.com"
+        "network": "livefyre.com"
     };
+    env && (opts.environment = env);
 
     collection = new Collection(opts);
     callback = this._generateContentHandler(this);
