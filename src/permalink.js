@@ -185,7 +185,7 @@ Permalink.prototype._getContent = function (collectionId, contentId, env) {
     var callback,
         collection,
         opts;
-    //?lf-content=t402.livefyre.com:10772933:26482715
+    //?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
     opts = {
         "id" : collectionId,
         "network": "livefyre.com"

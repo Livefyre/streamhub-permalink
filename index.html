@@ -20,10 +20,10 @@
         </script>
         <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
         <script>
-        HubPermalink.require([
+        require([
             'streamhub-permalink'
         ],function (Permalink) {
-            //index.html?lf-content=t402.livefyre.com:10772933:26482715
+            //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
             var pl = Permalink.getInstance(),
                 key = Permalink.KEYS.CONTENT;
             pl.default(key, function(content) {
