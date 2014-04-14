@@ -22,9 +22,7 @@ var util = require('streamhub-sdk/util');
  */
 var Permalink = function () {
     EventEmitter.call(this);
-    //
-    this._warehouse = {};
-    
+
     var self = this;
     Permalink.ITEMS.forEach(function (fn) {
         fn.call(self);
@@ -185,6 +183,7 @@ Permalink.prototype._getContent = function (collectionId, contentId, env) {
     var callback,
         collection,
         opts;
+
     //?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
     opts = {
         "id" : collectionId,
