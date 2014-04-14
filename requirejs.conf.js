@@ -45,6 +45,10 @@ require.config({
   },{
     name: 'tests',
     location: 'tests'
+  },{
+    name: 'view',
+    location: 'lib/view/src',
+    main: 'view'
   }],
   shim: {
     jquery: {
