@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="//livefyre-cdn.s3.amazonaws.com/libs/sdk/v2.5.1/rc/builds/11/streamhub-sdk.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/streamhub-sdk/src/css/style.css">
     <style>
     #view {
         /*width:500px;*/
@@ -18,28 +19,99 @@
                 baseUrl: ""
             });
         </script>
+
+        <script src="//livefyre-cdn.s3.amazonaws.com/libs/sdk/v2.5.1/rc/builds/11/streamhub-sdk.min.js" type="text/javascript"></script>
+        <script src="//cdn.livefyre.com/libs/apps/Livefyre/streamhub-wall/v2.3.0-beta.0-build.152/streamhub-wall.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
         <script>
-        HubPermalink.require([
-            'streamhub-permalink'
-        ],function (Permalink) {
+        var MediaWall = Livefyre.require('streamhub-wall'),
+            Collection = Livefyre.require('streamhub-sdk/collection'),
+            // ContentViewFactory = Livefyre.require('streamhub-sdk/content/content-view-factory'),
+            // AttachmentGalleryModal = Livefyre.require('streamhub-sdk/modal/views/attachment-gallery-modal'),
+            // GalleryAttachmentListView = Livefyre.require('streamhub-sdk/content/views/gallery-attachment-list-view'),
+            // ContentView = Livefyre.require('streamhub-sdk/content/views/content-view'),
+            // Modal = Livefyre.require('streamhub-sdk/modal'),
+            StateToContent = Livefyre.require('streamhub-sdk/content/state-to-content'),
+            $ = Livefyre.require('jquery');
+
+        require([
+            'streamhub-permalink',
+            'streamhub-sdk/content/views/content-view',
+            'streamhub-sdk/content/content-view-factory',
+            'streamhub-sdk/modal',
+            'streamhub-sdk/modal/views/attachment-gallery-modal',
+            'streamhub-sdk/content/views/gallery-attachment-list-view'
+        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView) {
+
+            /**
+             * A decorator that creates or takes an instace of ContentViewFactory and
+             * updates .createContentView() to return a View that handles
+             * 'focusContent.hub'.
+             * @param [opts] {Object}
+             * @param [opts.baseFactory] {ContentViewFactory} An instance of
+             *          ContentViewFacotry or something that subclasses it.
+             * @constructor
+             */
+            var PermalinkContentViewFactory = function (opts) {
+                opts = opts || {};
+                cvf = opts.baseFactory || new ContentViewFactory();
+
+                //Store the original method for later use
+                var superMethod = cvf.createContentView;
+                cvf.createContentView = function(content) {
+                    //Get the content...
+                    var contentView = superMethod.apply(cvf, arguments);
+                    //...update the events list...
+                    contentView.events = contentView.events.extended({
+                        'focusContent.hub': function (e, context) {
+                            var oembedView = new GalleryAttachmentListView(context);
+                            var oembedModalView = new AttachmentGalleryModal();
+
+                            oembedModalView.show(oembedView);
+                        }
+                    });
+                    //...redelegate the events...
+                    contentView.delegateEvents();
+                    //...and return it.
+                    return contentView;
+                };
+
+                return cvf;
+            };
+
             //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
             var pl = Permalink.getInstance(),
                 key = Permalink.KEYS.CONTENT;
+
+            //Set a default handler for permalinked content
             pl.default(key, function(content) {
-                alert('Default handler for permalink content');
+                console.log('Default handling for permalink content');
             })
 
-            var content = pl.get(key);
-            if (!content) {
+            //Try to get content from the permalink module
+            window.content = pl.get(key);
+            if (!window.content) {
+                //Attach listener incase content arrives
                 pl.on(key, function () {
-                    content = pl.get(key);
-                    alert('got "content" event');
-                    pl.get(key) && alert('can get(key)');
-                    // pl.preventDefault(key);//Comment in to prevent the default handler
+                    var content = pl.get(key);
+                    pl.preventDefault(key);//Comment in to prevent the default handler
+                    handlePermalinkContent(content);
                 });
             } else {
-                alert('got content right away');
+                //Content was available
+                handlePermalinkContent(window.content);
+            }
+
+            function handlePermalinkContent(content) {
+                window.content = content;
+
+                //Get the view for the content
+                var cvf = new PermalinkContentViewFactory(),
+                    contentView = cvf.createContentView(content);
+
+                //Show the contentView in a modal
+                var contentModalView = new Modal();
+                contentModalView.show(contentView, true);
             }
         });
         </script>
