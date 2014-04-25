@@ -115,12 +115,11 @@
             'annotations/clients/annotationscollection',
             'annotations/controller/comment',
             'livefyre-bootstrap/loader',
-            'streamhub-sdk/ui/button',
-            'streamhub-sdk/ui/command',
+            'streamhub-permalink/share-button',
             'annotations/adapters/auth-delegates',
             'annotations/config',
             'annotations/ui/popover'
-        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView, ShareMenu, BaseMenu, Collection, CommentController, loader, Button, Command, authUtil, config, Popover) {
+        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView, ShareMenu, BaseMenu, Collection, CommentController, loader, Button, authUtil, config, Popover) {
             authUtil.getNewDelegates(config.data, $.proxy(function() {
                 initCollection();
             }));
@@ -197,6 +196,8 @@
             }
 
             function handlePermalinkContent(content) {
+                content.permalink = window.location.href;
+                window.btn.setContent(content);
                 window.content = content;
                 return;//DEBUG (joao) Temporarily while testing share button
 
@@ -211,71 +212,10 @@
 
 
             ////Sharing
-            var btn = window.btn = new Button(new Command(showShare), {
+            var btn = window.btn = new Button(window.content, {
                 el: document.getElementById('share')
             });
 
-            function showShare() {
-                var showing = true;
-                window.content.permalink = window.location.href;
-                var menu = document.createElement('div');
-                document.body.appendChild(menu);
-                var share = window.share = new ShareMenu({
-                    el: menu,
-                    model: window.content
-                });
-                share.topNavEnabled = false;
-                share.events = BaseMenu.prototype.events;
-
-                share.render = function () {
-                    ShareMenu.prototype.render.call(this);
-                    loader.decorate($('.lf-loader-container')[0], 162);
-                };
-
-                share._renderContent = function () {
-                    ShareMenu.prototype._renderContent.call(this);
-                    // var frag = document.createDocumentFragment()
-                    // frag.innerHTML = [
-                    //     '<'
-                    // ].join('');
-
-
-                    var link = document.createElement('a');
-                    link.setAttribute('href', this._model.permalink);
-                    link.setAttribute('class', 'lf-share-link');
-                    link.innerText = 'Permalink';
-                    this.$el.find('.lf-menu-foot').html('').append(link);
-
-                    var arrow = document.createElement('div');
-                    arrow.setAttribute('class', 'lf-arrow');
-                    this.$el.prepend(arrow);
-
-                    this.delegateEvents();
-                };
-
-                share.render();
-                share.initialize();
-
-                var popover = window.popover = new Popover();
-                popover._position = Popover.POSITIONS.BOTTOM;
-                popover.render();
-                popover.setContentNode(share.el);
-                popover.resizeAndReposition(document.getElementById('share'));
-
-
-
-                $('html').one('click', hideShare);
-                function hideShare(ev) {
-                    if (showing) {
-                        showing = false;
-                        $('html').one('click', hideShare);
-                        return;
-                    }
-                    share.detach();
-                    share.destroy();
-                    popover.destroy();
-                }
-            }
         });
         </script>
     </body>
