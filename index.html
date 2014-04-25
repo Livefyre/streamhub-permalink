@@ -111,15 +111,12 @@
             'streamhub-sdk/modal/views/attachment-gallery-modal',
             'streamhub-sdk/content/views/gallery-attachment-list-view',
             'streamhub-permalink/share-menu',
-            'annotations/thread/ui/menu/base',
             'annotations/clients/annotationscollection',
-            'annotations/controller/comment',
-            'livefyre-bootstrap/loader',
+            'streamhub-permalink/share-controller',
             'streamhub-permalink/share-button',
             'annotations/adapters/auth-delegates',
-            'annotations/config',
-            'annotations/ui/popover'
-        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView, ShareMenu, BaseMenu, Collection, CommentController, loader, Button, authUtil, config, Popover) {
+            'annotations/config'
+        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView, ShareMenu, Collection, ShareController, ShareButton, authUtil, config) {
             authUtil.getNewDelegates(config.data, $.proxy(function() {
                 initCollection();
             }));
@@ -129,7 +126,7 @@
                     environment: 't402.livefyre.com',
                     id: 10772933
                 });
-                var ctrl = new CommentController({
+                var ctrl = new ShareController({
                     antenna: $(document.body),
                     collection: collection,
                     config: config.data
@@ -212,7 +209,7 @@
 
 
             ////Sharing
-            var btn = window.btn = new Button(window.content, {
+            var btn = window.btn = new ShareButton(window.content, {
                 el: document.getElementById('share')
             });
 
