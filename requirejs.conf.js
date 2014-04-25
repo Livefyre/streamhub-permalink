@@ -14,7 +14,35 @@ require.config({
     'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine',
     purl: 'lib/purl/purl'
   },
+  map: {
+    '*': {
+      'debug': 'streamhub-sdk/debug'
+    }
+  },
   packages: [{
+    name: 'annotations',
+    location: 'lib/annotations/src/javascript'
+  },{
+      name: 'annotations/events',
+      location: 'lib/annotations/src/javascript/events',
+      main: 'events'
+  },{
+      name: 'annotations/adapters',
+      location: 'lib/annotations/src/javascript/adapters',
+      main: 'adapters'
+  },{
+    name: "auth",
+    location: "lib/auth/src"
+  },{
+      name: 'templates',
+      location: 'lib/annotations/src/templates'
+  },{
+      name: 'eref',
+      location: 'lib/eref-js/src'
+  },{
+      name: 'livefyre-bootstrap',
+      location: 'lib/livefyre-bootstrap/src'
+  },{
     name: 'stream',
     location: 'lib/stream/src'
   },{

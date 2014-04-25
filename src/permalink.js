@@ -2,10 +2,10 @@
 
 var Collection = require('streamhub-sdk/collection');
 var EventEmitter = require('event-emitter');
-var inherits = require('inherits')
+var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
-var uriInterpreter = require('streamhub-permalink/uri-interpreter')
+var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 var util = require('streamhub-sdk/util');
 
 /**

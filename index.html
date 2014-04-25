@@ -7,9 +7,78 @@
     #view {
         /*width:500px;*/
     }
+
+    .lf-share {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        text-align: center;
+
+        background-color: white;
+        border: 0;
+        position: absolute;
+        /*top: 30px;
+        left: 30px;*/
+        z-index: 1010;
+        display: block;
+        max-width: 276px;
+        padding: 1px;
+        background-clip: padding-box;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+        -ms-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+        -o-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+        white-space: normal;
+    }
+
+    .lf-share .lf-arrow {
+        position: absolute;
+        left: 50%;
+        margin-left: -11px;
+        top: -11px;
+    }
+
+    .lf-share .lf-arrow:after {
+        content: " ";
+        top: 1px;
+        margin-left: -10px;
+        border-top-width: 0;
+    }
+
+    .lf-menu-body {
+        width: 162px;
+    }
+
+    .lf-share .lf-twitter {
+        background-color: #55acee;
+        color: white;
+    }
+
+    .lf-share .lf-facebook {
+        background-color: #3b5998;
+        color: white;
+    }
+
+    .lf-share .lf-share-link {
+        color: gray;
+    }
+/*
+    .lf-share .lf-menu-foot {
+        padding: 0;
+    }
+
+    .lf-share .lf-menu-foot textarea {
+        margin: 0;
+    }
+*/
+    .content {
+        padding: 0;
+    }
     </style>
 </head>
     <body>
+        <button id="share">Share</button>
         <div id="view"></div>
 
         <script src="lib/cajon/cajon.js" type="text/javascript"></script>
@@ -40,8 +109,33 @@
             'streamhub-sdk/content/content-view-factory',
             'streamhub-sdk/modal',
             'streamhub-sdk/modal/views/attachment-gallery-modal',
-            'streamhub-sdk/content/views/gallery-attachment-list-view'
-        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView) {
+            'streamhub-sdk/content/views/gallery-attachment-list-view',
+            'streamhub-permalink/share-menu',
+            'annotations/thread/ui/menu/base',
+            'annotations/clients/annotationscollection',
+            'annotations/controller/comment',
+            'livefyre-bootstrap/loader',
+            'streamhub-sdk/ui/button',
+            'streamhub-sdk/ui/command',
+            'annotations/adapters/auth-delegates',
+            'annotations/config',
+            'annotations/ui/popover'
+        ],function (Permalink, ContentView, ContentViewFactory, Modal, AttachmentGalleryModal, GalleryAttachmentListView, ShareMenu, BaseMenu, Collection, CommentController, loader, Button, Command, authUtil, config, Popover) {
+            authUtil.getNewDelegates(config.data, $.proxy(function() {
+                initCollection();
+            }));
+            function initCollection() {
+                var collection = new Collection({
+                    network: 'livefyre.com',
+                    environment: 't402.livefyre.com',
+                    id: 10772933
+                });
+                var ctrl = new CommentController({
+                    antenna: $(document.body),
+                    collection: collection,
+                    config: config.data
+                });
+            }
 
             /**
              * A decorator that creates or takes an instace of ContentViewFactory and
@@ -104,6 +198,7 @@
 
             function handlePermalinkContent(content) {
                 window.content = content;
+                return;//DEBUG (joao) Temporarily while testing share button
 
                 //Get the view for the content
                 var cvf = new PermalinkContentViewFactory(),
@@ -112,6 +207,74 @@
                 //Show the contentView in a modal
                 var contentModalView = new Modal();
                 contentModalView.show(contentView, true);
+            }
+
+
+            ////Sharing
+            var btn = window.btn = new Button(new Command(showShare), {
+                el: document.getElementById('share')
+            });
+
+            function showShare() {
+                var showing = true;
+                window.content.permalink = window.location.href;
+                var menu = document.createElement('div');
+                document.body.appendChild(menu);
+                var share = window.share = new ShareMenu({
+                    el: menu,
+                    model: window.content
+                });
+                share.topNavEnabled = false;
+                share.events = BaseMenu.prototype.events;
+
+                share.render = function () {
+                    ShareMenu.prototype.render.call(this);
+                    loader.decorate($('.lf-loader-container')[0], 162);
+                };
+
+                share._renderContent = function () {
+                    ShareMenu.prototype._renderContent.call(this);
+                    // var frag = document.createDocumentFragment()
+                    // frag.innerHTML = [
+                    //     '<'
+                    // ].join('');
+
+
+                    var link = document.createElement('a');
+                    link.setAttribute('href', this._model.permalink);
+                    link.setAttribute('class', 'lf-share-link');
+                    link.innerText = 'Permalink';
+                    this.$el.find('.lf-menu-foot').html('').append(link);
+
+                    var arrow = document.createElement('div');
+                    arrow.setAttribute('class', 'lf-arrow');
+                    this.$el.prepend(arrow);
+
+                    this.delegateEvents();
+                };
+
+                share.render();
+                share.initialize();
+
+                var popover = window.popover = new Popover();
+                popover._position = Popover.POSITIONS.BOTTOM;
+                popover.render();
+                popover.setContentNode(share.el);
+                popover.resizeAndReposition(document.getElementById('share'));
+
+
+
+                $('html').one('click', hideShare);
+                function hideShare(ev) {
+                    if (showing) {
+                        showing = false;
+                        $('html').one('click', hideShare);
+                        return;
+                    }
+                    share.detach();
+                    share.destroy();
+                    popover.destroy();
+                }
             }
         });
         </script>
