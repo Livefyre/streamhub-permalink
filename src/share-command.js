@@ -24,12 +24,14 @@ var ShareCommand = function(opts) {
         });
 
         share.render();
-        share.initialize();
+        
 
         var popover = new Popover();
         popover._position = Popover.POSITIONS.BOTTOM;
         popover.render();
         popover.setContentNode(share.el);
+        
+        share.initialize();
         popover.resizeAndReposition(document.getElementById('share'));
 
 

@@ -12,6 +12,7 @@ function ShareController(opts) {
 }
 inherits(ShareController, BaseController);
 
+/** @enum {string} */
 var COLLECTION_FN_MAP = (function () {
     var events = {};
     events[CommentEvents.GET_PERMALINK] = 'getPermalink';
@@ -47,12 +48,10 @@ ShareController.prototype._handleEvent = function(ev, opts) {
     var event = ev.type + '.' + ev.namespace;
     var fn = COLLECTION_FN_MAP[event];
     var self = this;
-    var successEvent = SUCCESS_EVENT_MAP[event];
-
+//TODO (joao) This doesn't generate the right link for my test data. Fix it.
     this._collection[fn].call(this._collection, opts, function (err, data) {
         (opts.callback || function () {}) (err, data);
         self.$antenna.trigger(CommentEvents.ACTION_SUCCESS, {event: ev});
-        successEvent && self.$antenna.trigger(successEvent, opts);
     });
 };
 

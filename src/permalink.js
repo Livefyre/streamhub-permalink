@@ -192,6 +192,7 @@ Permalink.prototype._getContent = function (collectionId, contentId, env) {
     env && (opts.environment = env);
 
     collection = new Collection(opts);
+    this.default
     callback = this._generateContentHandler(this);
     collection.fetchContent(contentId, callback);
 };
@@ -207,8 +208,9 @@ Permalink.prototype._generateContentHandler = function(self) {
             log('Error fetching permalink content: ' + err);
             return;
         }
-
-        self._set('content', content);
+        var key = Permalink.KEYS.CONTENT;
+        self.default(key, require('streamhub-permalink/default-permalink-content-handler'));
+        self._set(key, content);
     };
 };
 
