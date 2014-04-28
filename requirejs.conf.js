@@ -71,6 +71,9 @@ require.config({
     location: 'lib/streamhub-sdk/src',
     main: 'jquery'
   },{
+    name: 'streamhub-sdk-tests',
+    location: 'lib/streamhub-sdk/tests'
+  },{
     name: 'tests',
     location: 'tests'
   },{

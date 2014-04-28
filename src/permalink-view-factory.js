@@ -10,7 +10,7 @@ var GalleryAttachmentListView = require('streamhub-sdk/content/views/gallery-att
  * 'focusContent.hub'.
  * @param [opts] {Object}
  * @param [opts.baseFactory] {ContentViewFactory} An instance of
- *          ContentViewFacotry or something that subclasses it.
+ *          ContentViewFactory or something that subclasses it.
  */
 var permalinkViewFactory = function (opts) {
     opts = opts || {};
@@ -29,9 +29,6 @@ var permalinkViewFactory = function (opts) {
                 oembedModalView.show(oembedView);
             }
         });
-
-        //...redelegate the events...
-        contentView.delegateEvents();
 
         //...and return it.
         return contentView;
