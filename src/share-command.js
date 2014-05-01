@@ -1,6 +1,7 @@
 'use strict'
 
 var Command = require('streamhub-sdk/ui/command');
+var log = require('streamhub-sdk/debug')('streamhub-permalink/share-command');
 var inherits = require('inherits');
 var Popover = require('annotations/ui/popover');
 var ShareMenu = require('streamhub-permalink/share-menu');
@@ -8,44 +9,65 @@ var ShareMenu = require('streamhub-permalink/share-menu');
 var ShareCommand = function(opts) {
     opts = opts || {};
 
-    Command.call(this, showShare, opts);
+    Command.call(this, preShare, opts);
 
     if (opts.content) {
         this.setContent(opts.content);
     }
 
     var self = this;
-    function showShare() {
+    function preShare() {
         //TODO (joao) Not acceptible
         var showing = true;
 
-        var share = new ShareMenu({
-            model: self._content
+        //Get the permalink
+        if (self._content.permalink) {
+            showShare();
+            return;
+        }
+
+        self._content.collection.getPermalink(opts, function (err, data) {
+            if (err) {
+                log(err);
+                return
+            }
+            self._content.permalink = data;
+            showShare();
         });
 
-        share.render();
-        
+        function showShare() {
+            var share = new ShareMenu({
+                model: self._content
+            });
 
-        var popover = new Popover();
-        popover._position = Popover.POSITIONS.BOTTOM;
-        popover.render();
-        popover.setContentNode(share.el);
-        
-        share.initialize();
-        popover.resizeAndReposition(document.getElementById('share'));
+            share.render();
+
+            var popover = new Popover();
+            popover._position = Popover.POSITIONS.BOTTOM;
+            popover.events
+            popover.render();
+            popover.setContentNode(share.el);
+
+            share.initialize();
+            popover.resizeAndReposition(share.el);
 
 
-//TODO (joao) Remove this after adding controller stuff.
-        $('html').one('click', hideShare);
-        function hideShare(ev) {
-            if (showing) {
-                showing = false;
-                $('html').one('click', hideShare);
-                return;
+            //TODO (joao) Remove this after adding controller stuff.
+            $('html').one('click', hideShare);
+            function hideShare(ev) {
+                if (showing) {
+                    showing = false;
+                    $('html').one('click', hideShare);
+                    return;
+                }
+                postShare();
             }
-            share.detach();
-            share.destroy();
-            popover.destroy();
+
+            function postShare() {
+                share.detach();
+                share.destroy();
+                popover.destroy();
+            }
         }
     }
 }
@@ -57,7 +79,7 @@ ShareCommand.prototype.setContent = function (content) {
 }
 
 ShareCommand.prototype.canExecute = function () {
-    return Command.prototype.canExecute.call(this) && this._content;
+    return (Command.prototype.canExecute.call(this) && this._content) ? true : false;
 };
 
 module.exports = ShareCommand;

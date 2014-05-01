@@ -7,8 +7,8 @@ describe('streamhub-permalink/share-menu', function () {
     it('is a constructor that extends the Sidentes ShareMenu', function () {
         expect(typeof(ShareMenu)).toBe('function');
 
-        var ctlr = new ShareMenu();
-        expect(ctlr instanceof Share).toBe(true);
+        var menu = new ShareMenu();
+        expect(menu instanceof Share).toBe(true);
     });
 
     it('can render() its content when a model has or gets a permalink', function () {

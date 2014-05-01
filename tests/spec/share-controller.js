@@ -2,8 +2,10 @@
 
 var $ = require('jquery');
 var BaseController = require('annotations/controller/base');
+var CommentEvents = require('annotations/events').comment;
 var MockCollection = require('streamhub-sdk-tests/mocks/collection/mock-collection');
 var ShareController = require('streamhub-permalink/share-controller');
+var WriteEvents = require('annotations/events').write;
 
 describe('streamhub-permalink/share-controller', function () {
     it('is a constructor that extends BaseController', function () {
@@ -14,7 +16,7 @@ describe('streamhub-permalink/share-controller', function () {
     });
 
     describe('constructed with opts', function () {
-        var actlr,
+        var ctlr,
             opts;
         beforeEach(function () {
             opts = {
@@ -27,19 +29,35 @@ describe('streamhub-permalink/share-controller', function () {
         });
 
         it('listens on opts.antenna for "CommentEvents.GET_PERMALINK"', function () {
-            throw 'TODO (joao) Implement this!';
+            spyOn(ctlr, '_handleEvent');
+
+            opts.antenna.trigger(CommentEvents.GET_PERMALINK);
+
+            expect(ctlr._handleEvent).toHaveBeenCalled();
         });
 
         it('listens on opts.antenna for "WriteEvents.POST_SHARE"', function () {
-            throw 'TODO (joao) Implement this!';
+            spyOn(ctlr, '_handleShare');
+
+            opts.antenna.trigger(writeEvents.POST_SHARE);
+
+            expect(ctlr._handleShare).toHaveBeenCalled();
         });
 
         it('can _handleEvent()s, such as grabbing a permalink', function () {
-            throw 'TODO (joao) Implement this!';
+            spyOn(ctlr._collection, 'getPermalink');
+
+            ctlr._handleEvent();
+
+            expect(ctlr._collection.getPermalink).toHaveBeenCalled();
         });
 
         it('can _handleShare()s by opening a window', function () {
-            throw 'TODO (joao) Implement this!';
+            spyOn(window, 'open');
+
+            ctlr._handleShare();
+
+            expect(window.open).toHaveBeenCalled();
         });
     });
 });

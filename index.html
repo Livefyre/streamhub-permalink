@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="lib/streamhub-sdk/src/css/style.css">
     <style>
     #view {
-        /*width:500px;*/
+        width:300px;
     }
 
     .lf-share {
@@ -94,7 +94,7 @@
         <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
         <script>
         var MediaWall = Livefyre.require('streamhub-wall'),
-            Collection = Livefyre.require('streamhub-sdk/collection'),
+            // Collection = Livefyre.require('streamhub-sdk/collection'),
             // ContentViewFactory = Livefyre.require('streamhub-sdk/content/content-view-factory'),
             // AttachmentGalleryModal = Livefyre.require('streamhub-sdk/modal/views/attachment-gallery-modal'),
             // GalleryAttachmentListView = Livefyre.require('streamhub-sdk/content/views/gallery-attachment-list-view'),
@@ -106,25 +106,53 @@
         require([
             'streamhub-permalink',
             'annotations/clients/annotationscollection',
+            'streamhub-sdk/collection',
+            'streamhub-sdk/content/views/content-list-view',
+            'streamhub-sdk/sharer',
             'streamhub-permalink/share-controller',
             'streamhub-permalink/share-button',
+            'streamhub-permalink/share-command',
             'annotations/adapters/auth-delegates',
             'annotations/config'
-        ],function (Permalink, Collection, ShareController, ShareButton, authUtil, config) {
+        ],function (Permalink, AnnotationsCollection, SDKCollection, View, Sharer, ShareController, ShareButton, ShareCommand, authUtil, config) {
+            var collection,
+                collection2,
+                ctrl,
+                view;
             authUtil.getNewDelegates(config.data, $.proxy(function() {
                 initCollection();
             }));
             function initCollection() {
-                var collection = new Collection({
+                collection = new AnnotationsCollection({
                     network: 'livefyre.com',
                     environment: 't402.livefyre.com',
                     id: 10772933
                 });
-                var ctrl = new ShareController({
+                collection2 = new SDKCollection({//SDKCollection({
+                    environment: 't402.livefyre.com',
+                    network: "labs-t402.fyre.co",
+                    siteId: "303827",
+                    articleId: "xbox-0"
+                });
+                ctrl = new ShareController({
                     antenna: $(document.body),
                     collection: collection,
                     config: config.data
                 });
+                var sharer = Sharer;
+                sharer.share = function (content) {
+                    new ShareCommand({
+                        content: content
+                    }).execute();
+                };
+                sharer.delegate(true);//HACK
+                view = new View({
+                    initial: 3,
+                    showMore: 3,
+                    el: document.getElementById('view'),
+                    sharer: sharer
+                });
+                collection2.createArchive().pipe(view.more);
             }
 
             //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
@@ -142,7 +170,7 @@
                 //Attach listener incase content arrives
                 pl.on(key, function () {
                     var content = pl.get(key);
-                    // pl.preventDefault(key);//Comment in to prevent the default handler
+                    pl.preventDefault(key);//Comment in to prevent the default handler
                     setShareContent(content);
                 });
             } else {
@@ -157,7 +185,8 @@
 
 
             ////Sharing
-            var btn = window.btn = new ShareButton(window.content, {
+            var btn = window.btn = new ShareButton({
+                content: window.content,
                 el: document.getElementById('share')
             });
 

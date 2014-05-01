@@ -14,9 +14,6 @@ var Share = require('annotations/thread/ui/menu/share');
 function ShareMenu(opts) {
     Share.call(this, opts);
 
-    /** @override */
-    // this.postEvent = WriteEvents.POST_SHARE;
-
     this.topNavEnabled = false;
 }
 inherits(ShareMenu, Share);
