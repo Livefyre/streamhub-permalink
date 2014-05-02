@@ -3,7 +3,7 @@
 var Command = require('streamhub-sdk/ui/command');
 var log = require('streamhub-sdk/debug')('streamhub-permalink/share-command');
 var inherits = require('inherits');
-var Popover = require('annotations/ui/popover');
+var Popover = require('streamhub-permalink/ui/popover');
 var ShareMenu = require('streamhub-permalink/share-menu');
 
 var ShareCommand = function(opts) {

@@ -2,9 +2,8 @@
 
 var $ = require('jquery');
 var BaseController = require('annotations/controller/base');
-var CommentEvents = require('annotations/events').comment;
 var inherits = require('inherits');
-var SocialUtil = require('annotations/util/social');
+var SocialUtil = require('streamhub-sdk/social');
 var WriteEvents = require('annotations/events').write;
 
 function ShareController(opts) {
@@ -15,7 +14,7 @@ inherits(ShareController, BaseController);
 /** @enum {string} */
 var COLLECTION_FN_MAP = (function () {
     var events = {};
-    events[CommentEvents.GET_PERMALINK] = 'getPermalink';
+    events['comment.get_permalink'] = 'getPermalink';
     return events;
 })();
 
@@ -33,8 +32,8 @@ var SHARE_URLS = {
 
 ShareController.prototype.events = (function() {
     var events = {};
-    events[CommentEvents.GET_PERMALINK] = '_handleEvent';
-    events[WriteEvents.POST_SHARE] = '_handleShare';
+    events['comment.get_permalink'] = '_handleEvent';
+    events['write.post_share'] = '_handleShare';
     return events;
 })();
 
@@ -48,10 +47,10 @@ ShareController.prototype._handleEvent = function(ev, opts) {
     var event = ev.type + '.' + ev.namespace;
     var fn = COLLECTION_FN_MAP[event];
     var self = this;
-//TODO (joao) This doesn't generate the right link for my test data. Fix it.
+debugger
     this._collection[fn].call(this._collection, opts, function (err, data) {
         (opts.callback || function () {}) (err, data);
-        self.$antenna.trigger(CommentEvents.ACTION_SUCCESS, {event: ev});
+        self.$antenna.trigger('comment.action_success', {event: ev});
     });
 };
 
@@ -69,7 +68,7 @@ ShareController.prototype._handleShare = function(ev, opts) {
         ',width=',
         SHARE_POPUP_WIDTH
     ].join('');
-
+debugger
     // Support the case where this event bubbles from someone clicking share on
     // a comment or from the selected text popover.
     var content = opts.model || {

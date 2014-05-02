@@ -35,7 +35,7 @@ require.config({
     location: "lib/auth/src"
   },{
       name: 'templates',
-      location: 'lib/annotations/src/templates'
+      location: 'src/ui/templates'
   },{
       name: 'eref',
       location: 'lib/eref-js/src'

@@ -1,9 +1,9 @@
 'use strict'
 
-var BaseMenu = require('annotations/thread/ui/menu/base');
+var BaseMenu = require('streamhub-permalink/ui/menu/base');
 var inherits = require('inherits');
 var loader = require('livefyre-bootstrap/loader');
-var Share = require('annotations/thread/ui/menu/share');
+var Share = require('streamhub-permalink/ui/menu/share');
 
 /**
  * Flag menu.

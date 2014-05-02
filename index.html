@@ -78,7 +78,6 @@
     </style>
 </head>
     <body>
-        <button id="share">Share</button>
         <div id="view"></div>
 
         <script src="lib/cajon/cajon.js" type="text/javascript"></script>
@@ -94,51 +93,42 @@
         <script type="text/javascript" src="dist/streamhub-permalink.min.js"></script>
         <script>
         var MediaWall = Livefyre.require('streamhub-wall'),
-            // Collection = Livefyre.require('streamhub-sdk/collection'),
-            // ContentViewFactory = Livefyre.require('streamhub-sdk/content/content-view-factory'),
-            // AttachmentGalleryModal = Livefyre.require('streamhub-sdk/modal/views/attachment-gallery-modal'),
-            // GalleryAttachmentListView = Livefyre.require('streamhub-sdk/content/views/gallery-attachment-list-view'),
-            // ContentView = Livefyre.require('streamhub-sdk/content/views/content-view'),
-            // Modal = Livefyre.require('streamhub-sdk/modal'),
-            StateToContent = Livefyre.require('streamhub-sdk/content/state-to-content'),
             $ = Livefyre.require('jquery');
 
         require([
             'streamhub-permalink',
-            'annotations/clients/annotationscollection',
             'streamhub-sdk/collection',
             'streamhub-sdk/content/views/content-list-view',
             'streamhub-sdk/sharer',
             'streamhub-permalink/share-controller',
             'streamhub-permalink/share-button',
             'streamhub-permalink/share-command',
-            'annotations/adapters/auth-delegates',
-            'annotations/config'
-        ],function (Permalink, AnnotationsCollection, SDKCollection, View, Sharer, ShareController, ShareButton, ShareCommand, authUtil, config) {
+            'annotations/adapters/auth-delegates'
+        ],function (Permalink, SDKCollection, View, Sharer, ShareController, ShareButton, ShareCommand, authUtil) {
             var collection,
                 collection2,
-                ctrl,
-                view;
-            authUtil.getNewDelegates(config.data, $.proxy(function() {
+                view,
+                config = {
+                    assetServer: '/dev',
+                    authDelegateVersion: 'v0.4.4-beta',
+                    cdn: 'http://cdn.livefyre.com'
+                };
+            authUtil.getNewDelegates(config, $.proxy(function() {
                 initCollection();
             }));
             function initCollection() {
-                collection = new AnnotationsCollection({
+                collection = new SDKCollection({
                     network: 'livefyre.com',
                     environment: 't402.livefyre.com',
                     id: 10772933
                 });
-                collection2 = new SDKCollection({//SDKCollection({
+                collection2 = new SDKCollection({
                     environment: 't402.livefyre.com',
                     network: "labs-t402.fyre.co",
                     siteId: "303827",
                     articleId: "xbox-0"
                 });
-                ctrl = new ShareController({
-                    antenna: $(document.body),
-                    collection: collection,
-                    config: config.data
-                });
+
                 var sharer = Sharer;
                 sharer.share = function (content) {
                     new ShareCommand({
@@ -146,6 +136,7 @@
                     }).execute();
                 };
                 sharer.delegate(true);//HACK
+                
                 view = new View({
                     initial: 3,
                     showMore: 3,
@@ -171,25 +162,8 @@
                 pl.on(key, function () {
                     var content = pl.get(key);
                     pl.preventDefault(key);//Comment in to prevent the default handler
-                    setShareContent(content);
                 });
-            } else {
-                //Content was available
-                setShareContent(window.content);
             }
-
-            function setShareContent(content) {
-                content.permalink = window.location.href;
-                window.btn.setContent(content);
-            }
-
-
-            ////Sharing
-            var btn = window.btn = new ShareButton({
-                content: window.content,
-                el: document.getElementById('share')
-            });
-
         });
         </script>
     </body>
