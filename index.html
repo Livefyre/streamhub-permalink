@@ -99,12 +99,10 @@
             'streamhub-permalink',
             'streamhub-sdk/collection',
             'streamhub-sdk/content/views/content-list-view',
-            'streamhub-sdk/sharer',
-            'streamhub-permalink/share-controller',
-            'streamhub-permalink/share-button',
+            'streamhub-permalink/sharer',
             'streamhub-permalink/share-command',
             'annotations/adapters/auth-delegates'
-        ],function (Permalink, SDKCollection, View, Sharer, ShareController, ShareButton, ShareCommand, authUtil) {
+        ],function (Permalink, Collection, View, Sharer, ShareCommand, authUtil) {
             var collection,
                 collection2,
                 view,
@@ -117,26 +115,26 @@
                 initCollection();
             }));
             function initCollection() {
-                collection = new SDKCollection({
+                collection = new Collection({
                     network: 'livefyre.com',
                     environment: 't402.livefyre.com',
                     id: 10772933
                 });
-                collection2 = new SDKCollection({
+                collection2 = new Collection({
                     environment: 't402.livefyre.com',
                     network: "labs-t402.fyre.co",
                     siteId: "303827",
                     articleId: "xbox-0"
                 });
 
-                var sharer = Sharer;
-                sharer.share = function (content) {
-                    new ShareCommand({
-                        content: content
-                    }).execute();
-                };
+                var sharer = new Sharer(config);//For the assetServer
+                // sharer.share = function (content) {
+                //     new ShareCommand({
+                //         content: content
+                //     }).execute();
+                // };
                 sharer.delegate(true);//HACK
-                
+
                 view = new View({
                     initial: 3,
                     showMore: 3,

@@ -3,6 +3,7 @@
 var BaseMenu = require('streamhub-permalink/ui/menu/base');
 var inherits = require('inherits');
 var loader = require('livefyre-bootstrap/loader');
+var log = require('streamhub-sdk/debug')('streamhub-permalink/share-menu');
 var Share = require('streamhub-permalink/ui/menu/share');
 
 /**
@@ -44,5 +45,36 @@ ShareMenu.prototype._renderContent = function () {
 
     this.delegateEvents();
 };
+
+/**
+ * Fetches permalink data.
+ * @private
+ */
+ShareMenu.prototype._fetchPermalink = function () {
+    if (this._model.permalink) {
+        this._renderContent();
+        return;
+    }
+    
+    var self = this;
+    this._model.collection.getPermalink({content: this._model}, function (err, data) {
+        if (err) {
+            log(err);
+            return
+        }
+        self._handleFetchSuccess(err, data);
+    });
+};
+
+/**
+ * Handle the option click event. This should trigger a write event that will
+ * flag the comment.
+ * @param {jQuery.Event} ev
+ */
+ShareMenu.prototype.handleOptionClick = function (ev) {
+    ev.stopPropagation();
+    this.emit(this.postEvent, this.buildEventData(ev));
+};
+
 
 module.exports = ShareMenu;
