@@ -26,31 +26,38 @@ Sharer.prototype.share = function (contentView) {
         log('there is no share delegate');
         return;
     }
+    if (this.popover) {
+        this.hide();
+    }
     this._share(contentView);
 };
 
 Sharer.prototype._share = function (contentView) {
+    var btnEl = contentView.$el.find('.hub-content-share')[0];
     var menu = this.shareMenu = new ShareMenu({
         model: contentView.content
     });
 
     menu.render();
 
-    var pop = this.popover = new Popover();
+    var pop = this.popover = new Popover({
+        minPopoverInView: 108,
+        topSpacing: 108
+    });
     pop._position = Popover.POSITIONS.BOTTOM;
     pop.events
     pop.render();
     pop.setContentNode(menu.el);
 
     menu.initialize();
-    pop.resizeAndReposition(contentView.$el.find('.hub-content-share')[0]);
+    pop.resizeAndReposition(btnEl);
     menu.once('write.post_share', $.proxy(this._handleShare, this));
 
     //Timeout the listener attachment so that it doesn't pick-up the button click
     setTimeout($.proxy(function () {
         $('html').one('click', $.proxy(this.hide, this));
     }, this), 100);
-}
+};
 
 
 Sharer.prototype._handleShare = function(ev) {
