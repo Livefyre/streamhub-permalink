@@ -153,8 +153,8 @@ Popover.prototype._scrollIntoPosition = function (top) {
 
     var scrollY = domUtil.getScrollY();
     var bottomViewport = scrollY + $(window).height();
-    var isAboveBottomFold = top + this.opts.minPopoverInView <= bottomViewport;
-    var isBelowTopFold = top > scrollY + this.opts.topSpacing;
+    var isAboveBottomFold = top + (this.opts.minPopoverInView || 0) <= bottomViewport;
+    var isBelowTopFold = top > scrollY + (this.opts.topSpacing || 0);
 
     // If it's satisfactorily in view, don't shift the top position.
     if (isAboveBottomFold && isBelowTopFold) {
@@ -163,9 +163,9 @@ Popover.prototype._scrollIntoPosition = function (top) {
 
     var scrollTop;
     if (!isAboveBottomFold) {
-        scrollTop = scrollY + (this.opts.minPopoverInView + top - bottomViewport);
+        scrollTop = scrollY + ((this.opts.minPopoverInView || 0) + top - bottomViewport);
     } else if (!isBelowTopFold) {
-        scrollTop = top - this.opts.topSpacing;
+        scrollTop = top - (this.opts.topSpacing || 0);
     }
     scrollElem.animate({scrollTop: scrollTop}, this.opts.scrollDuration);
 };
