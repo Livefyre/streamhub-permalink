@@ -17,33 +17,40 @@ Sharer.prototype.hasDelegate = function () {
     return !!this._delegate;
 };
 
-Sharer.prototype.share = function (content) {
+Sharer.prototype.canShare = function (contentView) {
+    return true;
+};
+
+Sharer.prototype.share = function (contentView) {
     if ( ! this._delegate) {
         log('there is no share delegate');
         return;
     }
+    this._share(contentView);
+};
 
-    var shareMenu = this.shareMenu = new ShareMenu({
-        model: content
+Sharer.prototype._share = function (contentView) {
+    var menu = this.shareMenu = new ShareMenu({
+        model: contentView.content
     });
 
-    shareMenu.render();
+    menu.render();
 
-    var popover = this.popover = new Popover();
-    popover._position = Popover.POSITIONS.BOTTOM;
-    popover.events
-    popover.render();
-    popover.setContentNode(shareMenu.el);
+    var pop = this.popover = new Popover();
+    pop._position = Popover.POSITIONS.BOTTOM;
+    pop.events
+    pop.render();
+    pop.setContentNode(menu.el);
 
-    shareMenu.initialize();
-    popover.resizeAndReposition(shareMenu.el);//TODO (joao) Fix positinoing
-    shareMenu.once('write.post_share', $.proxy(this._handleShare, this));
+    menu.initialize();
+    pop.resizeAndReposition(contentView.$el.find('.hub-content-share')[0]);
+    menu.once('write.post_share', $.proxy(this._handleShare, this));
 
     //Timeout the listener attachment so that it doesn't pick-up the button click
     setTimeout($.proxy(function () {
         $('html').one('click', $.proxy(this.hide, this));
     }, this), 100);
-};
+}
 
 
 Sharer.prototype._handleShare = function(ev) {
