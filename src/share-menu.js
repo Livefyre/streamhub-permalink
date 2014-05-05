@@ -36,7 +36,7 @@ ShareMenu.prototype._renderContent = function () {
     var link = document.createElement('a');
     link.setAttribute('href', this._model.permalink);
     link.setAttribute('class', 'lf-share-link');
-    link.innerText = 'Permalink';
+    link.innerText = 'Copy Permalink';
     this.$el.find('.lf-menu-foot').html('').append(link);
 
     var arrow = document.createElement('div');
