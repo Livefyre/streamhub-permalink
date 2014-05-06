@@ -8,6 +8,45 @@
         width:300px;
     }
 
+    @font-face {
+      font-family: "fycons";
+      src:url("src/css/fonts/fycons.eot");
+      src:url("src/css/fonts/fycons.eot?#iefix") format("embedded-opentype"),
+        url("src/css/fonts/fycons.woff") format("woff"),
+        url("src/css/fonts/fycons.ttf") format("truetype"),
+        url("src/css/fonts/fycons.svg#fycons") format("svg");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    [class^="fycon-"]:before,
+    [class*=" fycon-"]:before {
+      font-family: "fycons" !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-variant: normal !important;
+      text-transform: none !important;
+      speak: none;
+      line-height: inherit;
+      display: inline-block;
+      vertical-align: middle;
+      white-space: pre;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .fycon-source-facebook:before {
+      content: "\e067 ";
+    }
+
+    .fycon-source-twitter:before {
+      content: "\e075 ";
+    }
+
+    .fycon-format-link:before {
+      content: "\e037 ";
+    }
+
     .lf-share {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: black;
@@ -28,17 +67,30 @@
         white-space: normal;
     }
 
-    .lf-share .lf-arrow {
+    .lf-popover .lf-popover-arrow {
+        /*width: 0;
+        height: 0;*/
+        border-bottom: 12px solid white;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+    }
+    .lf-popover .lf-popover-arrow {
         position: absolute;
         left: 50%;
-        margin-left: -11px;
-        top: -11px;
+        margin-left: 80px;
+        top: -30px;
+        background: transparent;
+        -webkit-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.4);
+        -ms-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.4);
+        -o-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.4);
     }
 
-    .lf-share .lf-arrow:after {
+    .lf-popover .lf-popover-arrow:after {
         content: " ";
         top: 1px;
-        margin-left: -10px;
+        margin-left: -11px;
         border-top-width: 0;
     }
 
@@ -52,6 +104,7 @@
         color: #fff;
         line-height: 36px;
         cursor: pointer;
+        list-style: none;
     }
 
     .lf-share .icon {
@@ -81,9 +134,10 @@
         position: absolute;
         z-index: 1010;
         transform-origin: center top;
+        margin-top: 10px;
     }
 
-    .lf-popover.lf-pos-bottom.lf-popover-arrow {
+    /*.lf-popover.lf-pos-bottom .lf-popover-arrow {
         background: url(../images/tail_up.png) 0 0 no-repeat;
         height: 16px;
         position: absolute;
@@ -92,7 +146,7 @@
         left: auto;
         top: -9px;
         width: 100%;
-    }
+    }*/
 
 /*
     .lf-share .lf-menu-foot {

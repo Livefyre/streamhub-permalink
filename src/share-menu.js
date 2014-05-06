@@ -35,13 +35,9 @@ ShareMenu.prototype._renderContent = function () {
 
     var link = document.createElement('a');
     link.setAttribute('href', this._model.permalink);
-    link.setAttribute('class', 'lf-share-link');
-    link.innerText = 'Copy Permalink';
+    link.setAttribute('class', 'lf-share-link fycon-format-link');
+    link.innerText = '  Copy Permalink';
     this.$el.find('.lf-menu-foot').html('').append(link);
-
-    var arrow = document.createElement('div');
-    arrow.setAttribute('class', 'lf-arrow');
-    this.$el.prepend(arrow);
 
     this.delegateEvents();
 };
