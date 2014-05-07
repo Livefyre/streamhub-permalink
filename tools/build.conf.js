@@ -7,9 +7,12 @@
   name: "streamhub-permalink",
   include: [
     'almond',
+    'annotations/adapters/auth-delegates',
     'streamhub-sdk/jquery',
     'streamhub-sdk/collection',
-    'streamhub-sdk/content'
+    'streamhub-sdk/content',
+    'streamhub-sdk/content/views/content-list-view',
+    'streamhub-permalink/sharer'
   ],
   stubModules: ['text', 'hgn', 'json'],
   out: "../dist/streamhub-permalink.min.js",
@@ -18,7 +21,7 @@
     excludeHogan: true
   },
   cjsTranslate: true,
-  optimize: "uglify2",
+  optimize: "none",
   preserveLicenseComments: false,
   uglify2: {
     compress: {

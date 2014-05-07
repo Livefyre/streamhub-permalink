@@ -1,5 +1,6 @@
 'use strict'
 
+var $ = require('streamhub-sdk/jquery');
 var BaseMenu = require('streamhub-permalink/ui/menu/base');
 var inherits = require('inherits');
 var loader = require('livefyre-bootstrap/loader');
