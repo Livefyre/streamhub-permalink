@@ -12,7 +12,9 @@
     'streamhub-sdk/collection',
     'streamhub-sdk/content',
     'streamhub-sdk/content/views/content-list-view',
-    'streamhub-permalink/sharer'
+    'streamhub-sdk/modal',
+    'streamhub-permalink/sharer',
+    'streamhub-permalink/default-permalink-content-handler'
   ],
   stubModules: ['text', 'hgn', 'json'],
   out: "../dist/streamhub-permalink.min.js",
