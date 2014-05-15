@@ -12,12 +12,8 @@ require.config({
     inherits: 'lib/inherits/inherits',
     blanket: 'lib/blanket/dist/qunit/blanket',
     'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine',
-    purl: 'lib/purl/purl'
-  },
-  map: {
-    '*': {
-      'debug': 'streamhub-sdk/debug'
-    }
+    purl: 'lib/purl/purl',
+    debug: 'lib/debug/debug'
   },
   packages: [{
     name: 'annotations',

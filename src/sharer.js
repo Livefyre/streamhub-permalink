@@ -17,11 +17,11 @@ Sharer.prototype.hasDelegate = function () {
     return !!this._delegate;
 };
 
-Sharer.prototype.canShare = function (contentView) {
+Sharer.prototype.canShare = function (content) {
     return true;
 };
 
-Sharer.prototype.share = function (contentView) {
+Sharer.prototype.share = function (content) {
     if ( ! this._delegate) {
         log('there is no share delegate');
         return;
@@ -29,13 +29,13 @@ Sharer.prototype.share = function (contentView) {
     if (this.popover) {
         this.hide();
     }
-    this._share(contentView);
+    this._share(content);
 };
 
-Sharer.prototype._share = function (contentView) {
-    var btnEl = contentView.$el.find('.hub-content-share')[0];
+Sharer.prototype._share = function (content) {
+    var btnEl = content.view.$el.find('.hub-content-share')[0];
     var menu = this.shareMenu = new ShareMenu({
-        model: contentView.content
+        model: content
     });
 
     menu.render();

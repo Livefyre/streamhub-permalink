@@ -22,8 +22,6 @@
   },
   "resolutions": {
     "jquery": "~1.10.2",
-    "view": "1.2.1",
-    "streamhub-sdk": "her_fetch",
-    "Swipe": "slide_move_cb"
+    "view": "1.2.1"
   }
 }
