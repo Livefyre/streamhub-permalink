@@ -70,6 +70,9 @@ require.config({
     name: 'streamhub-sdk-tests',
     location: 'lib/streamhub-sdk/tests'
   },{
+    name: 'streamhub-wall',
+    location: 'lib/streamhub-wall/src'
+  },{
     name: 'tests',
     location: 'tests'
   },{

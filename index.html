@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="lib/streamhub-sdk/src/css/style.css">
     <style>
     #view {
-        width:300px;
+        /*width:300px;*/
     }
 
     @font-face {
@@ -187,8 +187,9 @@
             'streamhub-permalink',
             'streamhub-sdk/collection',
             'streamhub-sdk/content/views/content-list-view',
-            'streamhub-permalink/sharer'
-        ],function (Permalink, Collection, View, Sharer) {
+            'streamhub-permalink/sharer',
+            'streamhub-wall'
+        ],function (Permalink, Collection, View, Sharer, MediaWall) {
             var collection,
                 collection2,
                 view,
@@ -216,7 +217,7 @@
                 var sharer = new Sharer(config);//For the assetServer
                 sharer.delegate(true);//HACK
 
-                view = new View({
+                view = new MediaWall({//View({
                     initial: 3,
                     showMore: 3,
                     el: document.getElementById('view'),
