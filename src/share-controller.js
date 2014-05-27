@@ -1,10 +1,9 @@
 'use strict'
 
 var $ = require('jquery');
-var BaseController = require('annotations/controller/base');
+var BaseController = require('streamhub-permalink/ui/base-controller');
 var inherits = require('inherits');
-var SocialUtil = require('streamhub-sdk/social');
-var WriteEvents = require('annotations/events').write;
+var SocialUtil = require('streamhub-sdk/share-format');
 
 function ShareController(opts) {
     BaseController.call(this, opts);
@@ -81,7 +80,7 @@ debugger
     shareObj.provider = opts.value;
     var params = SocialUtil.generateParams(shareObj);
     window.open(baseUrl + params, 'intent', specs);
-    this.$antenna.trigger(WriteEvents.COMMENT_SHARED, $.extend({}, content, shareObj));
+    this.$antenna.trigger('write.comment_shared', $.extend({}, content, shareObj));
 };
 
 module.exports = ShareController;

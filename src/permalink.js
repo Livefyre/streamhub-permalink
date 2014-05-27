@@ -1,6 +1,7 @@
 'use strict';
 
 var Collection = require('streamhub-sdk/collection');
+var enums = require('streamhub-permalink/enums');
 var EventEmitter = require('event-emitter');
 var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
@@ -23,35 +24,14 @@ var util = require('streamhub-sdk/util');
 var Permalink = function () {
     EventEmitter.call(this);
 
-    var self = this;
-    Permalink.ITEMS.forEach(function (fn) {
-        fn.call(self);
-    });
+    //Check for content permalink
+    var content = uriInterpreter.getContentPermalink();
+    if (content) {
+    //Load the code to parse, fetch, and display content
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content);
+    }
 };
 inherits(Permalink, EventEmitter);
-
-/**
- * Keys for the different types of permalinkable Livefyre items.
- * @type {Object.<string, string>}
- */
-Permalink.KEYS = {
-    CONTENT: 'content'
-};
-
-Permalink.ITEMS = [
-    function () {
-        var content = uriInterpreter.getContentPermalink();
-        if (!content) {
-            return false;
-        }
-        content = content.split(':');
-        if (content.length === 3) {
-            //Env was provided
-            content.push(content.shift());
-        }
-        this._getContent.apply(this, content);
-    }
-]
 
 /**
  * A place for storing things in dictionary fassion.
@@ -78,7 +58,7 @@ Permalink.prototype._warehouse = {};
  * @param [args] {Array=}
  * @return {!DefaultHandler}
   */
- Permalink.prototype._generateDefaulHandler = function (fn, context, args) {
+ Permalink.prototype._generateDefaultHandler = function (fn, context, args) {
     return {
         prevented: false,
         fn: fn || util.nullFunction,
@@ -98,17 +78,16 @@ Permalink.prototype._handlers = {};
  * Sets an item in the warehouse, then emits an event
  * @param key {!string} The key emitted and used to access the item.
  * @param item {!*} The item to be stored in the warehouse
- * @private
  */
-Permalink.prototype._set = function (key, item) {
+Permalink.prototype.set = function (key, item) {
     if (!key || typeof(item) === 'undefined') {
-        throw 'Attempted to ._set without key or item';
+        throw new Error('Attempted to ._set without key or item');
         return;
     }
 
     var exists = this._warehouse[key];
     if (exists) {
-        log('Attemped to overide an existing key, ' + key);
+        throw new Error('Attemped to overide an existing key, ' + key);
         return;
     }
 
@@ -136,7 +115,7 @@ Permalink.prototype.preventDefault = function (key) {
 
     var dh = this._handlers[key];
     if (!dh) {
-        dh = this._generateDefaulHandler();
+        dh = this._generateDefaultHandler();
         this._handlers[key] = dh;
     }
     dh.prevent = true;
@@ -163,55 +142,12 @@ Permalink.prototype.get = function (key) {
 Permalink.prototype.default = function (key, fn, context, args) {
     if (!key || !fn) {
         log('Attempted to .default without key or function');
-        return this._generateDefaulHandler();
+        return this._generateDefaultHandler();
     }
 
-    var dh = this._generateDefaulHandler(fn, context, args);
+    var dh = this._generateDefaultHandler(fn, context, args);
     this._handlers[key] = dh;
     return dh;
-};
-
-
-/**
- * Gets Content from the server and places it in the warehouse under the CONTENT key.
- * @param collectionId {!string} ID for the content's collection
- * @param contentId {!string} ID for the content
- * @param [env] {string=} For environments other than production
- * @private
- */
-Permalink.prototype._getContent = function (collectionId, contentId, env) {
-    var callback,
-        collection,
-        opts;
-
-    //?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
-    opts = {
-        "id" : collectionId,
-        "network": "livefyre.com"
-    };
-    env && (opts.environment = env);
-
-    collection = new Collection(opts);
-    this.default
-    callback = this._generateContentHandler(this);
-    collection.fetchContent(contentId, callback);
-};
-
-/**
- * Generates a handler function for content. Used by collection.fetchContent in this._getContent.
- * @param self {!Object} The 'this' object.
- * @return {!function(err: Object, data: Object)} A callback function
- */
-Permalink.prototype._generateContentHandler = function(self) {
-    return function(err, content) {
-        if (err) {
-            log('Error fetching permalink content: ' + err);
-            return;
-        }
-        var key = Permalink.KEYS.CONTENT;
-        self.default(key, require('streamhub-permalink/default-permalink-content-handler'));
-        self._set(key, content);
-    };
 };
 
 module.exports = Permalink;

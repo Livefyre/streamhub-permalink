@@ -17,7 +17,18 @@ uriInterpreter.FIELDS = {
 };
 
 uriInterpreter.getContentPermalink = function () {
-    return purl(document.location).fparam(uriInterpreter.FIELDS.PERMACONTENT);
+    var retval,
+        value = purl(document.location).fparam(uriInterpreter.FIELDS.PERMACONTENT);
+    if (value) {
+        retval = {};
+        value = value.split(':');
+        if (value.length === 3) {
+            retval.environment = value.shift();
+        }
+        retval.collectionId = value[0];
+        retval.contentId = value[1];
+    }
+    return retval;
 };
 
 module.exports = uriInterpreter;

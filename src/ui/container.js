@@ -5,8 +5,8 @@
 
 var $ = require('jquery');
 var inherits = require('inherits');
-var nullFunction = require('annotations/util/internals').nullFunction;
-var UserAgentUtil = require('annotations/util/useragent');
+var nullFunction = function () {};
+var UserAgentUtil = require('streamhub-sdk/user-agent');
 var View = require('view');
 var lfWrapperTemplate = require('hgn!templates/lfwrapper');
 

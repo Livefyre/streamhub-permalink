@@ -3,7 +3,7 @@ var debug = require('streamhub-sdk/debug');
 var log = debug('streamhub-sdk/views/list-view');
 var Popover = require('streamhub-permalink/ui/popover');
 var ShareMenu = require('streamhub-permalink/share-menu');
-var SocialUtil = require('streamhub-sdk/social');
+var SocialUtil = require('streamhub-sdk/share-format');
 
 var Sharer = function (opts) {
     this.opts = opts;

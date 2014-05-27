@@ -5,7 +5,6 @@
     "./src/main.js"
   ],
   "dependencies": {
-    "annotations": "git@github.com:Livefyre/annotations.git",
     "base64": "git://github.com/ross-pfahler/Base64.js#~0.3.3",
     "cajon": "git://github.com/requirejs/cajon.git#~0.1.11",
     "inherits": "git://github.com/Livefyre/inherits.git",

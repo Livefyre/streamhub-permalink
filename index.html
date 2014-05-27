@@ -188,8 +188,9 @@
             'streamhub-sdk/collection',
             'streamhub-sdk/content/views/content-list-view',
             'streamhub-permalink/sharer',
+            'streamhub-permalink/enums',
             'streamhub-wall'
-        ],function (Permalink, Collection, View, Sharer, MediaWall) {
+        ],function (Permalink, Collection, View, Sharer, permalinkEnums, MediaWall) {
             var collection,
                 collection2,
                 view,
@@ -229,8 +230,8 @@
             })();
 
             //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
-            var pl = Permalink.getInstance(),
-                key = Permalink.KEYS.CONTENT;
+            var pl = Permalink,
+                key = permalinkEnums.KEYS.CONTENT;
 
             //Set a default handler for permalinked content
             // pl.default(key, function(content) {

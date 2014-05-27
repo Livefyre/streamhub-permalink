@@ -16,17 +16,6 @@ require.config({
     debug: 'lib/debug/debug'
   },
   packages: [{
-    name: 'annotations',
-    location: 'lib/annotations/src/javascript'
-  },{
-      name: 'annotations/events',
-      location: 'lib/annotations/src/javascript/events',
-      main: 'events'
-  },{
-      name: 'annotations/adapters',
-      location: 'lib/annotations/src/javascript/adapters',
-      main: 'adapters'
-  },{
     name: "auth",
     location: "lib/auth/src"
   },{

@@ -5,7 +5,7 @@
 
 var $ = require('jquery');
 var Container = require('streamhub-permalink/ui/container');
-var domUtil = require('annotations/util/dom');
+var domUtil = require('streamhub-permalink/ui/util/dom');
 var inherits = require('inherits');
 
 /**
