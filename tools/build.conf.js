@@ -12,7 +12,6 @@
     'streamhub-sdk/content',
     'streamhub-sdk/content/views/content-list-view',
     'streamhub-sdk/modal',
-    'streamhub-permalink/sharer',
     'streamhub-permalink/default-permalink-content-renderer',
     'streamhub-wall'
   ],

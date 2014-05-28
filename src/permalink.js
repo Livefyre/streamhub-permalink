@@ -1,13 +1,11 @@
 'use strict';
 
-var Collection = require('streamhub-sdk/collection');
 var enums = require('streamhub-permalink/enums');
 var EventEmitter = require('event-emitter');
 var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
-var util = require('streamhub-sdk/util');
 
 /**
  * Permalink checks the page URI on construction for Livefyre permalinking parameters.

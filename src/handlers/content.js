@@ -1,6 +1,6 @@
 'use strict'
 
-var Collection = require('streamhub-sdk/collection');
+var fetchContent = require('streamhub-sdk/content/fetch-content');
 
 /**
  * Handles permalinks for content.
@@ -18,15 +18,14 @@ var contentHandler = function (permalink, key, contentInfo) {
         collection,
         opts;
 
-    //?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
     opts = {
-        "id" : collectionId,
-        "network": "livefyre.com"
+        contentId: contentId,
+        collectionId: collectionId,
+        network: 'livefyre.com'
     };
     environment && (opts.environment = environment);
 
-    collection = new Collection(opts);
-    collection.fetchContent(contentId, callback);
+    fetchContent(opts, callback);
 
     /**
      * Recieves content and sets it and a handler on the Permalink instance.
@@ -35,7 +34,7 @@ var contentHandler = function (permalink, key, contentInfo) {
      */
     function callback(err, content) {
         if (err) {
-            log('Error fetching permalink content: ' + err);
+            throw new Error('Error fetching permalink content: ' + err);
             return;
         }
 

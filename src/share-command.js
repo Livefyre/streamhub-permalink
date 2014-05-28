@@ -14,6 +14,9 @@ var ShareCommand = function(opts) {
     if (opts.content) {
         this.setContent(opts.content);
     }
+    if (opts.positionEl) {
+        this.setPositionElement(opts.positionEl);
+    }
 
     var self = this;
     function preShare() {
@@ -49,7 +52,7 @@ var ShareCommand = function(opts) {
             popover.setContentNode(share.el);
 
             share.initialize();
-            popover.resizeAndReposition(share.el);
+            popover.resizeAndReposition(this._positionEl);
 
 
             //TODO (joao) Remove this after adding controller stuff.
@@ -70,13 +73,17 @@ var ShareCommand = function(opts) {
             }
         }
     }
-}
+};
 inherits(ShareCommand, Command);
 
 ShareCommand.prototype.setContent = function (content) {
     this._content = content;
     this._emitChangeCanExecute();
-}
+};
+
+ShareCommand.prototype.setPositionElement = function (el) {
+    this._positionEl = el;
+};
 
 ShareCommand.prototype.canExecute = function () {
     return (Command.prototype.canExecute.call(this) && this._content) ? true : false;

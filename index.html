@@ -215,14 +215,13 @@
                     articleId: "xbox-0"
                 });
 
-                var sharer = new Sharer(config);//For the assetServer
-                sharer.delegate(true);//HACK
+                // var sharer = new Sharer(config);//For the assetServer
+                // sharer.delegate(true);//HACK
 
                 view = new MediaWall({//View({
                     initial: 3,
                     showMore: 3,
-                    el: document.getElementById('view'),
-                    sharer: sharer
+                    el: document.getElementById('view')
                 });
                 var archive = collection2.createArchive();
                 archive.read();

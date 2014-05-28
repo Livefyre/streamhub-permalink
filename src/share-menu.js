@@ -29,10 +29,6 @@ ShareMenu.prototype.render = function () {
 
 ShareMenu.prototype._renderContent = function () {
     Share.prototype._renderContent.call(this);
-    // var frag = document.createDocumentFragment()
-    // frag.innerHTML = [
-    //     '<'
-    // ].join('');
 
     var link = document.createElement('a');
     link.setAttribute('href', this._model.permalink);
@@ -70,6 +66,7 @@ ShareMenu.prototype._fetchPermalink = function () {
  */
 ShareMenu.prototype.handleOptionClick = function (ev) {
     ev.stopPropagation();
+    debugger
     this.emit(this.postEvent, this.buildEventData(ev));
 };
 

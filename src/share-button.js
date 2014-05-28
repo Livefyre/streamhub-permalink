@@ -11,7 +11,12 @@ var ShareCommand = require('streamhub-permalink/share-command');
  * [opts.content] {Content=} Content to share. Can be set later.
  */
 var ShareButton = function (opts) {
-    Button.call(this, opts && opts.command || new ShareCommand(opts), opts);
+    var cmd = opts.command;
+    if (!cmd) {
+        cmd = new ShareCommand(opts); 
+    }
+    Button.call(this, cmd, opts);
+    cmd.setPositionElement(this.el);
 }
 inherits(ShareButton, Button);
 

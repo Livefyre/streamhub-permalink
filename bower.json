@@ -12,7 +12,7 @@
     "purl": "git://github.com/allmarkedup/purl.git#~2.3",
     "auth": "git://github.com/Livefyre/auth.git",
     "auth-livefyre": "git://github.com/gobengo/auth-livefyre.git",
-    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#jaws_share_rebased",
+    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#ks_share_try_3",
     "streamhub-wall": "git://github.com/Livefyre/streamhub-wall.git"
   },
   "devDependencies": {
