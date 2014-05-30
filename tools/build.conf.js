@@ -7,13 +7,7 @@
   name: "streamhub-permalink",
   include: [
     'almond',
-    'streamhub-sdk/jquery',
-    'streamhub-sdk/collection',
-    'streamhub-sdk/content',
-    'streamhub-sdk/content/views/content-list-view',
-    'streamhub-sdk/modal',
-    'streamhub-permalink/default-permalink-content-renderer',
-    'streamhub-wall'
+    'streamhub-permalink/default-permalink-content-renderer'
   ],
   stubModules: ['text', 'hgn', 'json'],
   out: "../dist/streamhub-permalink.min.js",

@@ -59,8 +59,18 @@ require.config({
     name: 'streamhub-sdk-tests',
     location: 'lib/streamhub-sdk/tests'
   },{
+    name: 'streamhub-ui',
+    location: 'lib/streamhub-ui/src'
+  },{
     name: 'streamhub-wall',
     location: 'lib/streamhub-wall/src'
+  },{
+    name: "streamhub-share",
+    location: "lib/streamhub-share/src",
+    main: "share-button"
+  },{
+    name: "livefyre-bootstrap",
+    location: "lib/livefyre-bootstrap/src"
   },{
     name: 'tests',
     location: 'tests'
