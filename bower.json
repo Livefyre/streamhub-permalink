@@ -23,8 +23,6 @@
     "almond": "~0.2.5"
   },
   "resolutions": {
-    "jquery": "~1.10.2",
-    "view": "1.2.1",
-    "streamhub-sdk": "~v2.8"
+    "view": "~1.1"
   }
 }

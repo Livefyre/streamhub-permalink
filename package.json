@@ -6,7 +6,7 @@
     "name": "Joao Martins",
     "email": "joao@livefyre.com"
   },
-  "version": "0.1.0",
+  "version": "0.1.0-pre.0",
   "dependencies": {
     "bower": "1.2.6",
     "cajon": "~0.1.11",
@@ -16,7 +16,7 @@
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install",
     "start": "./node_modules/http-server/bin/http-server .",
-    "build": "npm run-script clean-build && ./node_modules/requirejs/bin/r.js -o ./tools/build.conf.js && npm run build-css",
+    "build": "npm run-script clean-build && ./node_modules/requirejs/bin/r.js -o ./tools/build.conf.js",
     "build-css": "npm run build-sdk && npm run copy-dists",
     "clean-build": "rm -rf dist",
     "hint": "./node_modules/jshint/bin/jshint src/ tests/spec; echo",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "jshint": "~2.1.0",
     "jsdoc": "git://github.com/jsdoc3/jsdoc.git",
+    "requirejs": "2.1.9",
     "phantomjs": "~1.9.2-2",
     "karma": "~0.10.5",
     "karma-chrome-launcher": "~0.1.0",
