@@ -3,6 +3,7 @@
 var AttachmentGalleryModal = require('streamhub-sdk/modal/views/attachment-gallery-modal');
 var ContentViewFactory = require('streamhub-sdk/content/content-view-factory');
 var GalleryAttachmentListView = require('streamhub-sdk/content/views/gallery-attachment-list-view');
+var packageAttribute = require('./package-attribute');
 
 /**
  * A decorator that creates or takes an instace of ContentViewFactory and
@@ -25,6 +26,7 @@ var permalinkViewFactory = function (opts) {
             'focusContent.hub': function (e, context) {
                 var oembedView = new GalleryAttachmentListView(context);
                 var oembedModalView = new AttachmentGalleryModal();
+                packageAttribute.decorateModal(oembedModalView);
 
                 oembedModalView.show(oembedView);
             }
