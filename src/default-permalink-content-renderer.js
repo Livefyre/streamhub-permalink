@@ -2,6 +2,8 @@
 
 var Modal = require('streamhub-sdk/modal');
 var permalinkViewFactory = require('streamhub-permalink/permalink-view-factory');
+var sdkStyles = require('css!streamhub-sdk/css/style.css');
+var packageAttribute = require('./package-attribute');
 
 var defaultPermalinkContentHandler = function (content) {
     //Get the view for the content
@@ -10,6 +12,7 @@ var defaultPermalinkContentHandler = function (content) {
 
     //Show the contentView in a modal
     var contentModalView = new Modal();
+    packageAttribute.decorateModal(contentModalView);
     contentModalView.show(contentView, true);
 
     contentView.$el.find('.lf-content-share').remove();

@@ -13,7 +13,9 @@ require.config({
     blanket: 'lib/blanket/dist/qunit/blanket',
     'blanket-jasmine': 'lib/blanket/dist/jasmine/blanket_jasmine',
     purl: 'lib/purl/purl',
-    debug: 'lib/debug/debug'
+    debug: 'lib/debug/debug',
+    'livefyre-package-attribute': 'lib/livefyre-package-attribute/src/main',
+    rework: 'lib/rework/rework'
   },
   packages: [{
     name: "auth",
@@ -78,6 +80,14 @@ require.config({
     name: 'view',
     location: 'lib/view/src',
     main: 'view'
+  },{
+    name: "css",
+    location: "lib/require-css",
+    main: "css"
+  },{
+    name: "less",
+    location: "lib/require-less",
+    main: "less"
   }],
   shim: {
     jquery: {
@@ -96,6 +106,24 @@ require.config({
     },
     'jasmine-jquery': {
         deps: ['jquery']
+    },
+    rework: {
+        exports: 'rework'
+    }
+  },
+  css: {
+    clearFileEachBuild: 'dist/streamhub-permalink.min.css',
+    transformEach: [{
+      requirejs: 'lib/livefyre-package-attribute/tools/prefix-css-requirejs',
+      node: 'lib/livefyre-package-attribute/tools/prefix-css-node'
+    }]
+  },
+  less: {
+    browserLoad: 'dist/streamhub-permalink.min',
+    paths: ['lib'],
+    relativeUrls: true,
+    modifyVars: {
+      '@icon-font-path': "\"http://cdn.livefyre.com/libs/livefyre-bootstrap/v1.1.0/fonts/\""
     }
   }
 });

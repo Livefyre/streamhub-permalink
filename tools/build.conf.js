@@ -11,6 +11,8 @@
   ],
   stubModules: ['text', 'hgn', 'json'],
   out: "../dist/streamhub-permalink.min.js",
+  buildCSS: true,
+  separateCSS: true,
   pragmasOnSave: {
     excludeHogan: true
   },
