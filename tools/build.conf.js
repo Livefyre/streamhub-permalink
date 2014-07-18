@@ -11,7 +11,8 @@
   ],
   stubModules: ['text', 'hgn', 'json'],
   out: "../dist/streamhub-permalink.min.js",
-  namespace: 'HubPermalink',
+  buildCSS: true,
+  separateCSS: true,
   pragmasOnSave: {
     excludeHogan: true
   },
@@ -25,6 +26,10 @@
     mangle: true
   },
   generateSourceMaps: true,
+  wrap: {
+    startFile: 'wrap-start.frag',
+    endFile: 'wrap-end.frag'
+  },
   onBuildRead: function(moduleName, path, contents) {
     switch (moduleName) {
       case "jquery":
