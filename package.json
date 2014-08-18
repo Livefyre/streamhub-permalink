@@ -11,7 +11,8 @@
     "bower": "1.2.6",
     "cajon": "~0.1.11",
     "http-server": "*",
-    "phantom": "*"
+    "phantom": "*",
+    "less": "1.7.3"
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install",
@@ -27,6 +28,7 @@
     "jsdoc": "rm -rf docs/api && ./node_modules/jsdoc/jsdoc README.md -c tools/jsdoc.conf.json",
     "send-to-coveralls": "find coverage -name 'lcov.info' -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
     "build-sdk": "(cd lib/streamhub-sdk && npm run build)",
+    "lessc": "./node_modules/less/bin/lessc -ru --verbose --compress src/css/styles.{less,css}",
     "copy-dists": "cp -a lib/streamhub-sdk/dist/ dist/"
   },
   "devDependencies": {
