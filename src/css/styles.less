@@ -1,5 +1,21 @@
 @import 'lib/livefyre-bootstrap/src/styles/buttons.less';
 
+.hub-modal {
+    .hub-modal-close{
+        &.permalink-modal-close{
+            top: 24px;
+            right: 27px;
+
+            background-image:none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #A1A3A9;
+            text-indent: 0px;
+            text-align: center;
+        }
+    }
+}
+
 .hub-modal-content-view {
     max-width: 640px;
 }
@@ -13,5 +29,10 @@
 
         .lf-btn();
         .lf-btn-default();
+
+        display:none;
+        &.show{
+            display:block;
+        }
     }
 }

@@ -34,6 +34,35 @@
                         // pl.preventDefault(key);//Uncomment in to prevent the default handler
                     });
                 }
+
+                window.addEventListener('message', function(event){
+                    console.log(event)
+                    var msg = null; 
+
+                    if(typeof event.data === 'object') 
+                        msg = event.data 
+                    else {
+                        try{ 
+                            msg = JSON.parse(event.data)
+                        } catch(e){ 
+                            return; 
+                        }       
+                    }
+
+                    if(msg.to !== 'permalink') 
+                        return;
+
+                    if(msg.action == 'post'){
+                        var msg = {
+                            from: 'permalink',
+                            to: 'permalink-modal',
+                            action: 'post',
+                            data: pl.get(permalinkEnums.KEYS.CONTENT_OPTIONS)
+                        };
+                        window.postMessage(JSON.stringify(msg),'*');
+                    }
+                       
+                }, false);
             });
         </script>
     </body>

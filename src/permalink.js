@@ -25,11 +25,74 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
-    //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content);
+        window.addEventListener('message', this.onPostMessage.bind(this), false);
+        //Load the code to parse, fetch, and display content
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, this.sendRegistration.bind(this));
     }
 };
 inherits(Permalink, EventEmitter);
+
+
+Permalink.prototype.onPostMessage = function(event){
+    var msg = null; 
+
+    if(typeof event.data === 'object') 
+        msg = event.data 
+    else {
+        try{ 
+            msg = JSON.parse(event.data)
+        } catch(e){ 
+            //failure can occur on messages that just send normal strings
+            //or maleformed JSON, so just return.
+            return; 
+        }       
+    }
+
+    //Return if the message isn't for me
+    if(msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') 
+        return;
+   
+    this.recieveAppRegistration(msg.data)
+};
+
+Permalink.prototype.recieveAppRegistration = function(data){
+    var self = this;
+    //Only perform work if the app is related to the content in me (if I have any)
+    var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS); 
+    var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
+    if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
+        return;
+
+    var button = this.modalView.el.getElementsByClassName('permalink-button')[0];
+
+    var hasShow = button.className.indexOf('show');
+    if(hasShow < 0)
+        button.className += ' show';
+    button.onclick = function(){
+        self.modalView.hide();
+        self.messageHubToPermalink(data);
+    };
+};
+
+Permalink.prototype.messageHubToPermalink = function(data){
+    var msg = {
+        from: 'permalink-modal',
+        to: 'permalink',
+        action: 'put',
+        data: data
+    };
+    window.postMessage(JSON.stringify(msg),'*');
+};
+
+Permalink.prototype.sendRegistration = function(){
+    var msg = {
+        from: 'permalink-modal',
+        to: 'permalink',
+        action: 'post',
+        data: this.get(enums.KEYS.CONTENT_OPTIONS)
+    };
+    window.postMessage(JSON.stringify(msg),'*');
+};
 
 /**
  * A place for storing things in dictionary fassion.

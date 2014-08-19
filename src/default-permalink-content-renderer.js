@@ -18,6 +18,9 @@ var defaultPermalinkContentHandler = function (content) {
     contentModalView.show(contentView, true);
 
 
+    var closeBtn = contentView.el.parentElement.parentElement.getElementsByClassName('hub-modal-close')[0];
+    closeBtn.className += ' permalink-modal-close';
+    closeBtn.textContent = 'X';
     contentView.$el.css('max-width', '640px');//Necessary evil, until CSS things are sorted
     contentView.$el.addClass(defaultPermalinkContentHandler.CLASSES.PERMALINK);
     contentView.$el.find('.content-footer').append('\
@@ -25,6 +28,8 @@ var defaultPermalinkContentHandler = function (content) {
             <button class="permalink-button" type="button">View Conversation</button>\
         </div>\
     ');
+
+    this.modalView = contentModalView;
 };
 
 defaultPermalinkContentHandler.CLASSES = {
