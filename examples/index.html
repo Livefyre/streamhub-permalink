@@ -16,7 +16,6 @@
                 'streamhub-permalink',
                 'streamhub-permalink/enums'
             ],function (Permalink, permalinkEnums) {
-                //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
                 var pl = Permalink,
                     key = permalinkEnums.KEYS.CONTENT;
 
@@ -35,6 +34,7 @@
                     });
                 }
 
+                //Faking out the hub for now
                 window.addEventListener('message', function(event){
                     console.log(event)
                     var msg = null; 
