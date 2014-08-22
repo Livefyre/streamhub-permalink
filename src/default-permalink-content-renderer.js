@@ -25,7 +25,7 @@ var defaultPermalinkContentHandler = function (content) {
     contentView.$el.addClass(defaultPermalinkContentHandler.CLASSES.PERMALINK);
     contentView.$el.find('.content-footer').append('\
         <div class="hub-modal-content-permalink">\
-            <button class="permalink-button" type="button">View Conversation</button>\
+            <button class="permalink-button" type="button">View Context</button>\
         </div>\
     ');
 

@@ -22,13 +22,13 @@ var bind = require('mout/function/bind');
  */
 var Permalink = function () {
     EventEmitter.call(this);
-    this._msgEvent = window.addEventListener ? 'message' : 'onmessage';
-    this._addEvent = window.addEventListener || bus.attachEvent;
+    var msgEvent = window.addEventListener ? 'message' : 'onmessage';
+    var addEvent = window.addEventListener || window.attachEvent;
 
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
-        this._addEvent(this._msgEvent, bind(this.onPostMessage, this), false);
+        addEvent(msgEvent, bind(this.onPostMessage, this), false);
         //Load the code to parse, fetch, and display content
         require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
     }
