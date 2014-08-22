@@ -6,7 +6,7 @@ var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
-var bind = require('mout/functions/bind');
+var bind = require('mout/function/bind');
 
 /**
  * Permalink checks the page URI on construction for Livefyre permalinking parameters.

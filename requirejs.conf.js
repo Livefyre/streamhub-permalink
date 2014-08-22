@@ -88,6 +88,10 @@ require.config({
     name: "less",
     location: "lib/require-less",
     main: "less"
+  },{
+    name: "mout",
+    location: "lib/mout/src",
+    main: "index"
   }],
   shim: {
     jquery: {
