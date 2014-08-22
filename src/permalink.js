@@ -6,6 +6,7 @@ var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
+var bind = require('mout/functions/bind');
 
 /**
  * Permalink checks the page URI on construction for Livefyre permalinking parameters.
@@ -25,9 +26,9 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
-        window.addEventListener('message', this.onPostMessage.bind(this), false);
+        window.addEventListener('message', bind(this.onPostMessage, this), false);
         //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, this.sendRegistration.bind(this));
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
     }
 };
 inherits(Permalink, EventEmitter);
@@ -63,7 +64,7 @@ Permalink.prototype.recieveAppRegistration = function(data){
     if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
         return;
 
-    var button = this.modalView.el.getElementsByClassName('permalink-button')[0];
+    var button = this.modalView.el.querySelector('.permalink-button');
 
     var hasShow = button.className.indexOf('show');
     if(hasShow < 0)

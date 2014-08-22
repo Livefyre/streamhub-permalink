@@ -18,7 +18,7 @@ var defaultPermalinkContentHandler = function (content) {
     contentModalView.show(contentView, true);
 
 
-    var closeBtn = contentView.el.parentElement.parentElement.getElementsByClassName('hub-modal-close')[0];
+    var closeBtn = contentView.el.parentElement.parentElement.querySelector('.hub-modal-close');
     closeBtn.className += ' permalink-modal-close';
     closeBtn.textContent = 'X';
     contentView.$el.css('max-width', '640px');//Necessary evil, until CSS things are sorted
