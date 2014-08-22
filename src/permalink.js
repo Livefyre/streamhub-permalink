@@ -22,8 +22,8 @@ var bind = require('mout/function/bind');
  */
 var Permalink = function () {
     EventEmitter.call(this);
-    this._msgEvent = bus.addEventListener ? 'message' : 'onmessage';
-    this._addEvent = bus.addEventListener || bus.attachEvent;
+    this._msgEvent = window.addEventListener ? 'message' : 'onmessage';
+    this._addEvent = window.addEventListener || bus.attachEvent;
 
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
