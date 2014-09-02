@@ -14,8 +14,9 @@ uriInterpreter.FIELDS = {
 };
 
 uriInterpreter.getContentPermalink = function () {
-    var retval,
-        value = purl(document.location).fparam(uriInterpreter.FIELDS.PERMACONTENT);
+    var retval;
+    var value = window.location.hash ? window.location.hash.split('=') : [];
+    value = value.length > 0 ? value[value.length-1] : null;
     if (value) {
         retval = {};
         value = value.split(':');
