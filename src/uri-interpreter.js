@@ -2,7 +2,6 @@
 
 var log = require('streamhub-sdk/debug')
         ('streahub-permalink');
-var purl = require('purl');
 
 /**
  * A utility for parsing parameters in a URI
