@@ -16,7 +16,6 @@
                 'streamhub-permalink',
                 'streamhub-permalink/enums'
             ],function (Permalink, permalinkEnums) {
-                //index.html?meaning=less#lf-content=t402.livefyre.com:10772933:26482715&not=something
                 var pl = Permalink,
                     key = permalinkEnums.KEYS.CONTENT;
 
@@ -34,6 +33,36 @@
                         // pl.preventDefault(key);//Uncomment in to prevent the default handler
                     });
                 }
+
+                //Faking out the hub for now
+                window.addEventListener('message', function(event){
+                    console.log(event)
+                    var msg = null; 
+
+                    if(typeof event.data === 'object') 
+                        msg = event.data 
+                    else {
+                        try{ 
+                            msg = JSON.parse(event.data)
+                        } catch(e){ 
+                            return; 
+                        }       
+                    }
+
+                    if(msg.to !== 'permalink') 
+                        return;
+
+                    if(msg.action == 'post'){
+                        var msg = {
+                            from: 'permalink',
+                            to: 'permalink-modal',
+                            action: 'post',
+                            data: pl.get(permalinkEnums.KEYS.CONTENT_OPTIONS)
+                        };
+                        window.postMessage(JSON.stringify(msg),'*');
+                    }
+                       
+                }, false);
             });
         </script>
     </body>
