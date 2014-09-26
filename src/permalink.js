@@ -62,8 +62,8 @@ Permalink.prototype.recieveAppRegistration = function(data){
     var self = this;
     //Only perform work if the app is related to the content in me (if I have any)
     var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS); 
-    var collectionId = contentOptions && contentOptions.collectionId !== undefined ? contentOptions.collectionId : null;
-    var contentId = contentOptions && contentOptions.contentId !== undefined ? contentOptions.contentId : null;
+    var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
+    var contentId = contentOptions && contentOptions.contentId ? contentOptions.contentId : null;
     if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
         return;
 
