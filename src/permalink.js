@@ -6,6 +6,7 @@ var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
+var bind = require('mout/function/bind');
 
 /**
  * Permalink checks the page URI on construction for Livefyre permalinking parameters.
@@ -21,15 +22,82 @@ var uriInterpreter = require('streamhub-permalink/uri-interpreter');
  */
 var Permalink = function () {
     EventEmitter.call(this);
+    var msgEvent = window.addEventListener ? 'message' : 'onmessage';
+    var addEvent = window.addEventListener || window.attachEvent;
 
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
-    //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content);
+        addEvent(msgEvent, bind(this.onPostMessage, this), false);
+        //Load the code to parse, fetch, and display content
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
     }
 };
 inherits(Permalink, EventEmitter);
+
+
+Permalink.prototype.onPostMessage = function(event){
+    var msg = null; 
+
+    if(typeof event.data === 'object') 
+        msg = event.data 
+    else {
+        try{ 
+            msg = JSON.parse(event.data)
+        } catch(e){ 
+            //failure can occur on messages that just send normal strings
+            //or maleformed JSON, so just return.
+            return; 
+        }       
+    }
+
+    //Return if the message isn't for me
+    if(msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') 
+        return;
+   
+    this.recieveAppRegistration(msg.data)
+};
+
+Permalink.prototype.recieveAppRegistration = function(data){
+    var self = this;
+    //Only perform work if the app is related to the content in me (if I have any)
+    var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS); 
+    var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
+    var contentId = contentOptions && contentOptions.contentId ? contentOptions.contentId : null;
+    if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
+        return;
+
+    data.contentId = contentId;
+    var button = this.modalView.el.querySelector('.permalink-button');
+
+    var hasShow = button.className.indexOf('show');
+    if(hasShow < 0)
+        button.className += ' show';
+    button.onclick = function(){
+        self.modalView.hide();
+        self.messageHubToPermalink(data);
+    };
+};
+
+Permalink.prototype.messageHubToPermalink = function(data){
+    var msg = {
+        from: 'permalink-modal',
+        to: 'permalink',
+        action: 'put',
+        data: data
+    };
+    window.postMessage(JSON.stringify(msg),'*');
+};
+
+Permalink.prototype.sendRegistration = function(){
+    var msg = {
+        from: 'permalink-modal',
+        to: 'permalink',
+        action: 'post',
+        data: this.get(enums.KEYS.CONTENT_OPTIONS)
+    };
+    window.postMessage(JSON.stringify(msg),'*');
+};
 
 /**
  * A place for storing things in dictionary fassion.
