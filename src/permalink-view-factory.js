@@ -21,16 +21,19 @@ var permalinkViewFactory = function (opts) {
         //Get the content...
         var contentView = superMethod.apply(viewFactory, arguments);
 
-        //...update the events list...
-        contentView.events = contentView.events.extended({
-            'focusContent.hub': function (e, context) {
-                var oembedView = new GalleryAttachmentListView(context);
-                var oembedModalView = new AttachmentGalleryModal();
-                packageAttribute.decorateModal(oembedModalView);
+        var oldRender = contentView.render;
+        contentView.render = function(){
+            oldRender.apply(contentView);
 
-                oembedModalView.show(oembedView);
-            }
-        });
+            //apply permalink-specific DOM changes
+            contentView.$el.find('.content-attachments-gallery-thumbnails .content-attachment').off('click');
+            contentView.$el.addClass('permalink-content');
+            contentView.$el.find('.content-footer').append('\
+                <div class="hub-modal-content-permalink">\
+                    <button class="permalink-button" type="button">View Context</button>\
+                </div>\
+            ');
+        };
 
         //...and return it.
         return contentView;
