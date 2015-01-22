@@ -8,24 +8,42 @@ var log = require('streamhub-sdk/debug')
  */
 var uriInterpreter = {};
 
-uriInterpreter.FIELDS = {
-    PERMACONTENT: "lf-content"
+uriInterpreter.patterns = {
+    // environment?:collectionId:contentId
+    content: /lf-content=(([^:]+):)?(\d+):(\d+)/
 };
 
 uriInterpreter.getContentPermalink = function () {
-    var retval;
-    var value = window.location.hash ? window.location.hash.split('=') : [];
-    value = value.length > 0 ? value[value.length-1] : null;
-    if (value) {
-        retval = {};
-        value = value.split(':');
-        if (value.length === 3) {
-            retval.environment = value.shift();
-        }
-        retval.collectionId = value[0];
-        retval.contentId = value[1];
-    }
-    return retval;
+    return this.parse(window.location.hash);
 };
+
+/**
+ * Parse a string like `window.location.hash`, and return
+ * an object describing the Livefyre permalink, if there is one.
+ */
+uriInterpreter.parse = function (hash) {
+    if ( ! hash) {
+        return;
+    }
+    
+    var contentPatternMatch = hash.match(this.patterns.content);
+    if ( ! contentPatternMatch) {
+        return;
+    }
+
+    var environment = contentPatternMatch[2];
+    var collectionId = contentPatternMatch[3];
+    var contentId = contentPatternMatch[4];
+
+    var parsed = {
+        collectionId: collectionId,
+        contentId: contentId
+    };
+    // not specified in prod
+    if (environment) {
+        parsed.environment = environment;
+    }
+    return parsed;
+}
 
 module.exports = uriInterpreter;
