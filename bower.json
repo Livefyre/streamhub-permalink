@@ -1,6 +1,6 @@
 {
   "name": "streamhub-permalink",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": [
     "./src/main.js"
   ],
@@ -29,6 +29,7 @@
     "base64": "~0.4.0",
     "auth": "~0.2",
     "view": "~1.3",
-    "require-css": "transformEach2"
+    "require-css": "transformEach2",
+    "livefyre-bootstrap": "v1.3.4"
   }
 }
