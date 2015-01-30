@@ -6,6 +6,7 @@ var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
+var util = require('streamhub-sdk/util');
 var bind = require('mout/function/bind');
 
 /**
