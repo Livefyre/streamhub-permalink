@@ -10,7 +10,7 @@ var uriInterpreter = {};
 
 uriInterpreter.patterns = {
     // environment?:collectionId:contentId
-    content: /lf-content=(([^:]+):)?(\d+):(\d+)/
+    content: /lf-content=(([^:]+):)?([^:]+):([^$#]+)/
 };
 
 uriInterpreter.getContentPermalink = function () {

@@ -23,6 +23,18 @@ describe('streamhub-permalink/uri-interpreter', function () {
         })
       });
 
+      it('properly parses livefyre permalink hashes for sidenotes Content', function () {
+        var hashes = [
+          '#lf-content=77593265:5d1d7c5bbcae4d9da656c00e8354a08c@livefyre.com',
+          '#blah?who#blah##lf-content=77593265:5d1d7c5bbcae4d9da656c00e8354a08c@livefyre.com#NOMG'
+        ];
+        hashes.forEach(function (hash) {
+          var parsed = uriInterpreter.parse(hash);
+          expect(parsed.collectionId).toBe('77593265');
+          expect(parsed.contentId).toBe('5d1d7c5bbcae4d9da656c00e8354a08c@livefyre.com');
+        })
+      });
+
       it('would properly parse permalink hashes if included an environment segment', function () {
         var hashes = [
           '#lf-content=t402.livefyre.com:108098985:259357490',
