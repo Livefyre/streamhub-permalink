@@ -15,13 +15,14 @@ var contentHandler = function (permalink, key, contentInfo, callback) {
     var contentId = contentInfo.contentId,
         collectionId = contentInfo.collectionId,
         environment = contentInfo.environment,
+        network = contentInfo.network,
         collection,
         opts;
 
     opts = {
         contentId: contentId,
         collectionId: collectionId,
-        network: 'livefyre.com'
+        network: network
     };
     environment && (opts.environment = environment);
 
