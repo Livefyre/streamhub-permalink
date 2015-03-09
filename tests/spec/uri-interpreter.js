@@ -20,6 +20,8 @@ describe('streamhub-permalink/uri-interpreter', function () {
           var parsed = uriInterpreter.parse(hash);
           expect(parsed.collectionId).toBe('108098985');
           expect(parsed.contentId).toBe('259357490');
+          expect(parsed.environment).toBeUndefined();
+          expect(parsed.network).toBe('livefyre.com');
         })
       });
 
@@ -32,6 +34,8 @@ describe('streamhub-permalink/uri-interpreter', function () {
           var parsed = uriInterpreter.parse(hash);
           expect(parsed.collectionId).toBe('77593265');
           expect(parsed.contentId).toBe('5d1d7c5bbcae4d9da656c00e8354a08c@livefyre.com');
+          expect(parsed.environment).toBeUndefined();
+          expect(parsed.network).toBe('livefyre.com');
         })
       });
 
@@ -45,7 +49,17 @@ describe('streamhub-permalink/uri-interpreter', function () {
           expect(parsed.collectionId).toBe('108098985');
           expect(parsed.contentId).toBe('259357490');
           expect(parsed.environment).toBe('t402.livefyre.com');
+          expect(parsed.network).toBe('livefyre.com');
         })
+      });
+
+      it('uses custom network if present on permalink url', function () {
+        var hash = '#lf-content=74579420:6bfc8fa440b841b4ba1a7c0952683a1c@heremedia-int-0.fyre.co'
+        var parsed = uriInterpreter.parse(hash);
+        expect(parsed.collectionId).toBe('74579420');
+        expect(parsed.contentId).toBe('6bfc8fa440b841b4ba1a7c0952683a1c@heremedia-int-0.fyre.co');
+        expect(parsed.environment).toBeUndefined();
+        expect(parsed.network).toBe('heremedia-int-0.fyre.co');
       });
 
     })
