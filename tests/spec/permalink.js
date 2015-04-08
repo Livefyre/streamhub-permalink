@@ -61,7 +61,7 @@ describe('streamhub-permalink/permalink', function () {
             expect(pl._warehouse[key]).toBe(content);
         });
         
-        xit('throws if you try to ._set() without a key or item', function () {
+        it('throws if you try to ._set() without a key or item', function () {
             expect(function () {
                 pl._set();
             }).toThrow();

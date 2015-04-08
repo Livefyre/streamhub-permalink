@@ -34,10 +34,13 @@ uriInterpreter.parse = function (hash) {
     var environment = contentPatternMatch[2];
     var collectionId = contentPatternMatch[3];
     var contentId = contentPatternMatch[4];
+    var network = contentId.split('@');
+    network = network.length > 1 ? network[1] : 'livefyre.com';
 
     var parsed = {
         collectionId: collectionId,
-        contentId: contentId
+        contentId: contentId,
+        network: network
     };
     // not specified in prod
     if (environment) {
