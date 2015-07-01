@@ -34,8 +34,12 @@ uriInterpreter.parse = function (hash) {
     var environment = contentPatternMatch[2];
     var collectionId = contentPatternMatch[3];
     var contentId = contentPatternMatch[4];
-    var network = contentId.split('@');
-    network = network.length > 1 ? network[1] : 'livefyre.com';
+
+    var network = 'livefyre.com';
+    var matches = contentId.match(/@([^.]*\.fyre\.co)/);
+    if (matches) {
+        network = matches[1];
+    }
 
     var parsed = {
         collectionId: collectionId,

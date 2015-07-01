@@ -62,6 +62,24 @@ describe('streamhub-permalink/uri-interpreter', function () {
         expect(parsed.network).toBe('heremedia-int-0.fyre.co');
       });
 
+      it('correctly parses instagram content', function () {
+        var hash = '#lf-content=74579420:6bfc8fa440b841b4ba1a7c0952683a1c@instagram.com';
+        var parsed = uriInterpreter.parse(hash);
+        expect(parsed.collectionId).toBe('74579420');
+        expect(parsed.contentId).toBe('6bfc8fa440b841b4ba1a7c0952683a1c@instagram.com');
+        expect(parsed.environment).toBeUndefined();
+        expect(parsed.network).toBe('livefyre.com');
+      });
+
+      it('correctly parses twitter content', function () {
+        var hash = '#lf-content=74579420:6bfc8fa440b841b4ba1a7c0952683a1c@twitter.com';
+        var parsed = uriInterpreter.parse(hash);
+        expect(parsed.collectionId).toBe('74579420');
+        expect(parsed.contentId).toBe('6bfc8fa440b841b4ba1a7c0952683a1c@twitter.com');
+        expect(parsed.environment).toBeUndefined();
+        expect(parsed.network).toBe('livefyre.com');
+      });
+
     })
     describe('.getContentPermalink()', function () {
         xit('returns the value for the "lf-content" field', function () {
