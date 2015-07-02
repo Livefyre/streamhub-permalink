@@ -8,8 +8,10 @@ var packageAttribute = require('./package-attribute');
 
 var defaultPermalinkContentHandler = function (content) {
     //Get the view for the content
-    var cvf = permalinkViewFactory(),
-        contentView = cvf.createContentView(content);
+    var cvf = permalinkViewFactory();
+    var contentView = cvf.createContentView(content, {
+        sharer: { canShare: function() {} }
+    });
 
     //Show the contentView in a modal
     var contentModalView = new Modal();
