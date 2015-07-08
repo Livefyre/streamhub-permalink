@@ -10,24 +10,33 @@ var uriInterpreter = {};
 
 uriInterpreter.patterns = {
     // environment?:collectionId:contentId
-    content: /lf-content=(([^:]+):)?([^:]+):([^$#]+)/
+    content: /lf-content=(([^:]+):)?([^:]+):([^$#&]+)/
 };
 
-uriInterpreter.getContentPermalink = function () {
-    return this.parse(window.location.hash);
+/**
+ * Get a permalink object from the current url. Can also pass in a location
+ * object for testing.
+ * @param {Object=} loc Optional location object.
+ * @return {Object} Parsed permalink object.
+ */
+uriInterpreter.getContentPermalink = function (loc) {
+    loc = loc || window.location;
+    return this.parse(loc.search) || this.parse(loc.hash);
 };
 
 /**
  * Parse a string like `window.location.hash`, and return
  * an object describing the Livefyre permalink, if there is one.
+ * @param {string} part Query string or hash to be parsed.
+ * @return {Object} Parsed permalink object.
  */
-uriInterpreter.parse = function (hash) {
-    if ( ! hash) {
+uriInterpreter.parse = function (part) {
+    if (!part) {
         return;
     }
     
-    var contentPatternMatch = hash.match(this.patterns.content);
-    if ( ! contentPatternMatch) {
+    var contentPatternMatch = part.match(this.patterns.content);
+    if (!contentPatternMatch) {
         return;
     }
 
