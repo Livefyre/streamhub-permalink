@@ -21,7 +21,8 @@ var bind = require('mout/function/bind');
  * @constructor
  * @extends {EventEmitter}
  */
-var Permalink = function () {
+var Permalink = function (opts) {
+    opts = opts || {};
     EventEmitter.call(this);
     var msgEvent = window.addEventListener ? 'message' : 'onmessage';
     var addEvent = window.addEventListener || window.attachEvent;
@@ -31,7 +32,7 @@ var Permalink = function () {
     if (content) {
         addEvent(msgEvent, bind(this.onPostMessage, this), false);
         //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this), opts.contentViewFactory);
     }
 };
 inherits(Permalink, EventEmitter);

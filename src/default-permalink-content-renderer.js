@@ -6,9 +6,10 @@ var styles = require('css!./css/styles.css');
 var sdkStyles = require('css!streamhub-sdk/css/style.css');
 var packageAttribute = require('./package-attribute');
 
-var defaultPermalinkContentHandler = function (content) {
+var defaultPermalinkContentHandler = function (content, opts) {
+    opts = opts || {};
     //Get the view for the content
-    var cvf = permalinkViewFactory(),
+    var cvf = permalinkViewFactory({ baseFactory: opts.contentViewFactory }),
         contentView = cvf.createContentView(content);
 
     //Show the contentView in a modal

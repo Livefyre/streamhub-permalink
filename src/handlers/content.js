@@ -11,7 +11,7 @@ var fetchContent = require('streamhub-sdk/content/fetch-content');
  * @param contentInfo.contentId {!string} ID for the content
  * @param [contentInfo.environment] {string=} For environments other than production
  */
-var contentHandler = function (permalink, key, contentInfo, callback) {
+var contentHandler = function (permalink, key, contentInfo, callback, contentViewFactory) {
     var contentId = contentInfo.contentId,
         collectionId = contentInfo.collectionId,
         environment = contentInfo.environment,
@@ -39,7 +39,7 @@ var contentHandler = function (permalink, key, contentInfo, callback) {
         }
 
         permalink.set('content-options', opts);
-        permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'));
+        permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'), permalink, [{ contentViewFactory: contentViewFactory }]);
         permalink.set(key, content);
         callback();
     }
