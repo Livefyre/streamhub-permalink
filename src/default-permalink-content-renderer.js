@@ -9,7 +9,7 @@ var packageAttribute = require('./package-attribute');
 var defaultPermalinkContentHandler = function (content, opts) {
     opts = opts || {};
     //Get the view for the content
-    var cvf = permalinkViewFactory({ baseFactory: opts.contentViewFactory }),
+    var cvf = opts.contentViewFactory || permalinkViewFactory(),
         contentView = cvf.createContentView(content);
 
     //Show the contentView in a modal
