@@ -11,6 +11,7 @@
     "bower": "1.3.8",
     "cajon": "~0.1.11",
     "http-server": "*",
+    "lfcdn": "git://github.com/Livefyre/lfcdn",
     "phantom": "*",
     "less": "1.7.3"
   },
