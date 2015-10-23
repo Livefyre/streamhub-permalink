@@ -35,6 +35,9 @@ uriInterpreter.parse = function (part) {
         return;
     }
     
+    // Decode the query string or hash to make sure that it is in a valid state
+    // before attempting to match it against the content regex.
+    part = decodeURIComponent(part);
     var contentPatternMatch = part.match(this.patterns.content);
     if (!contentPatternMatch) {
         return;
