@@ -29,7 +29,7 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
-        if(content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
+        if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
             return; //Storify 2 post permalinks should never be opened in the modal
         }
         
