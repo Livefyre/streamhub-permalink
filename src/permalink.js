@@ -29,6 +29,10 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
+        if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
+            return; //Storify 2 post permalinks should never be opened in the modal
+        }
+        
         addEvent(msgEvent, bind(this.onPostMessage, this), false);
         //Load the code to parse, fetch, and display content
         require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
