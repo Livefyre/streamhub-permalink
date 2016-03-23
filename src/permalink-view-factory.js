@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var AttachmentGalleryModal = require('streamhub-sdk/modal/views/attachment-gallery-modal');
 var ContentViewFactory = require('streamhub-sdk/content/content-view-factory');
@@ -14,29 +14,29 @@ var packageAttribute = require('./package-attribute');
  *          ContentViewFactory or something that subclasses it.
  */
 var permalinkViewFactory = function (opts) {
-    opts = opts || {};
-    var viewFactory = opts.baseFactory || new ContentViewFactory();
-    var superMethod = viewFactory.createContentView;
-    viewFactory.createContentView = function(content) {
-        //Get the content...
-        var contentView = superMethod.apply(viewFactory, arguments);
+  opts = opts || {};
+  var viewFactory = opts.baseFactory || new ContentViewFactory();
+  var superMethod = viewFactory.createContentView;
+  viewFactory.createContentView = function (content) {
+    // Get the content...
+    var contentView = superMethod.apply(viewFactory, arguments);
 
-        //...update the events list...
-        contentView.events = contentView.events.extended({
-            'focusContent.hub': function (e, context) {
-                var oembedView = new GalleryAttachmentListView(context);
-                var oembedModalView = new AttachmentGalleryModal();
-                packageAttribute.decorateModal(oembedModalView);
+    // ...update the events list...
+    contentView.events = contentView.events.extended({
+      'focusContent.hub': function (e, context) {
+        var oembedView = new GalleryAttachmentListView(context);
+        var oembedModalView = new AttachmentGalleryModal();
+        packageAttribute.decorateModal(oembedModalView);
 
-                oembedModalView.show(oembedView);
-            }
-        });
+        oembedModalView.show(oembedView);
+      }
+    });
 
-        //...and return it.
-        return contentView;
-    };
+    // ...and return it.
+    return contentView;
+  };
 
-    return viewFactory;
-}
+  return viewFactory;
+};
 
 module.exports = permalinkViewFactory;

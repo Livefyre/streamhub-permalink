@@ -1,8 +1,5 @@
 'use strict';
 
-var log = require('streamhub-sdk/debug')
-        ('streahub-permalink');
-
 /**
  * A utility for parsing parameters in a URI
  */
@@ -10,7 +7,7 @@ var uriInterpreter = {};
 
 uriInterpreter.patterns = {
     // environment?:collectionId:contentId
-    content: /lf-content=(([^:]+):)?([^:]+):([^$#&]+)/
+  content: /lf-content=(([^:]+):)?([^:]+):([^$#&]+)/
 };
 
 /**
@@ -20,8 +17,8 @@ uriInterpreter.patterns = {
  * @return {Object} Parsed permalink object.
  */
 uriInterpreter.getContentPermalink = function (loc) {
-    loc = loc || window.location;
-    return this.parse(loc.search) || this.parse(loc.hash);
+  loc = loc || window.location;
+  return this.parse(loc.search) || this.parse(loc.hash);
 };
 
 /**
@@ -30,15 +27,13 @@ uriInterpreter.getContentPermalink = function (loc) {
  * @return {boolean}
  */
 uriInterpreter.isNetworkValid = function (network) {
-    if (/\.fyre\.co$/.test(network)) {
-        return true;
-    }
-
-    if (/livefyre\.com$/.test(network)) {
-        return true;
-    }
-
-    return false;
+  if (/\.fyre\.co$/.test(network)) {
+    return true;
+  }
+  if (/livefyre\.com$/.test(network)) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -47,7 +42,7 @@ uriInterpreter.isNetworkValid = function (network) {
  * @return {boolean}
  */
 uriInterpreter.isEnvironmentValid = function (environment) {
-    return /livefyre\.com$/.test(environment);
+  return /livefyre\.com$/.test(environment);
 };
 
 /**
@@ -57,48 +52,48 @@ uriInterpreter.isEnvironmentValid = function (environment) {
  * @return {Object} Parsed permalink object.
  */
 uriInterpreter.parse = function (part) {
-    if (!part) {
-        return;
-    }
+  if (!part) {
+    return;
+  }
 
     // Decode the query string or hash to make sure that it is in a valid state
     // before attempting to match it against the content regex.
-    part = decodeURIComponent(part);
-    var contentPatternMatch = part.match(this.patterns.content);
-    if (!contentPatternMatch) {
-        return;
+  part = decodeURIComponent(part);
+  var contentPatternMatch = part.match(this.patterns.content);
+  if (!contentPatternMatch) {
+    return;
+  }
+
+  var environment = contentPatternMatch[2];
+  var collectionId = contentPatternMatch[3];
+  var contentId = contentPatternMatch[4];
+
+  var network = 'livefyre.com';
+  var matches = contentId.match(/@([^.]*\.fyre\.co)/);
+  if (matches) {
+    network = matches[1];
+  }
+
+  if (!uriInterpreter.isNetworkValid(network)) {
+    throw new Error('Invalid network: ' + network);
+  }
+
+  var parsed = {
+    collectionId: collectionId,
+    contentId: contentId,
+    network: network
+  };
+
+  // not specified in prod
+  if (environment) {
+    parsed.environment = environment;
+
+    if (!uriInterpreter.isEnvironmentValid(environment)) {
+      throw new Error('Invalid environment: ' + environment);
     }
+  }
 
-    var environment = contentPatternMatch[2];
-    var collectionId = contentPatternMatch[3];
-    var contentId = contentPatternMatch[4];
-
-    var network = 'livefyre.com';
-    var matches = contentId.match(/@([^.]*\.fyre\.co)/);
-    if (matches) {
-        network = matches[1];
-    }
-
-    if (!uriInterpreter.isNetworkValid(network)) {
-        throw new Error('Invalid network: ' + network);
-    }
-
-    var parsed = {
-        collectionId: collectionId,
-        contentId: contentId,
-        network: network
-    };
-
-    // not specified in prod
-    if (environment) {
-        parsed.environment = environment;
-
-        if (!uriInterpreter.isEnvironmentValid(environment)) {
-            throw new Error('Invalid environment: ' + environment);
-        }
-    }
-
-    return parsed;
-}
+  return parsed;
+};
 
 module.exports = uriInterpreter;

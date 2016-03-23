@@ -18,17 +18,17 @@ require.config({
     rework: 'lib/rework/rework'
   },
   packages: [{
-    name: "auth",
-    location: "lib/auth/src"
+    name: 'auth',
+    location: 'lib/auth/src'
   },{
-      name: 'templates',
-      location: 'src/ui/templates'
+    name: 'templates',
+    location: 'src/ui/templates'
   },{
-      name: 'eref',
-      location: 'lib/eref-js/src'
+    name: 'eref',
+    location: 'lib/eref-js/src'
   },{
-      name: 'livefyre-bootstrap',
-      location: 'lib/livefyre-bootstrap/src'
+    name: 'livefyre-bootstrap',
+    location: 'lib/livefyre-bootstrap/src'
   },{
     name: 'stream',
     location: 'lib/stream/src'
@@ -67,12 +67,12 @@ require.config({
     name: 'streamhub-wall',
     location: 'lib/streamhub-wall/src'
   },{
-    name: "streamhub-share",
-    location: "lib/streamhub-share/src",
-    main: "share-button"
+    name: 'streamhub-share',
+    location: 'lib/streamhub-share/src',
+    main: 'share-button'
   },{
-    name: "livefyre-bootstrap",
-    location: "lib/livefyre-bootstrap/src"
+    name: 'livefyre-bootstrap',
+    location: 'lib/livefyre-bootstrap/src'
   },{
     name: 'tests',
     location: 'tests'
@@ -81,38 +81,38 @@ require.config({
     location: 'lib/view/src',
     main: 'view'
   },{
-    name: "css",
-    location: "lib/require-css",
-    main: "css"
+    name: 'css',
+    location: 'lib/require-css',
+    main: 'css'
   },{
-    name: "less",
-    location: "lib/require-less",
-    main: "less"
+    name: 'less',
+    location: 'lib/require-less',
+    main: 'less'
   },{
-    name: "mout",
-    location: "lib/mout/src",
-    main: "index"
+    name: 'mout',
+    location: 'lib/mout/src',
+    main: 'index'
   }],
   shim: {
     jquery: {
-        exports: '$'
+      exports: '$'
     },
     jasmine: {
-        exports: 'jasmine'
+      exports: 'jasmine'
     },
     'jasmine-html': {
-        deps: ['jasmine'],
-        exports: 'jasmine'
+      deps: ['jasmine'],
+      exports: 'jasmine'
     },
     'blanket-jasmine': {
-        exports: 'blanket',
-        deps: ['jasmine']
+      exports: 'blanket',
+      deps: ['jasmine']
     },
     'jasmine-jquery': {
-        deps: ['jquery']
+      deps: ['jquery']
     },
     rework: {
-        exports: 'rework'
+      exports: 'rework'
     }
   },
   css: {
@@ -127,7 +127,7 @@ require.config({
     paths: ['lib'],
     relativeUrls: true,
     modifyVars: {
-      '@icon-font-path': "\"http://cdn.livefyre.com/libs/livefyre-bootstrap/v1.1.0/fonts/\""
+      '@icon-font-path': '"http://cdn.livefyre.com/libs/livefyre-bootstrap/v1.1.0/fonts/"'
     }
   }
 });
