@@ -30,8 +30,7 @@
     "auth": "~0.2",
     "view": "1.4.1",
     "require-css": "transformEach2",
-    "livefyre-bootstrap": "v1.3.4",
-    "event-emitter": "0.1",
-    "streamhub-share": "0.3.0"
+    "livefyre-bootstrap": "v1.4.15",
+    "event-emitter": "0.1"
   }
 }
