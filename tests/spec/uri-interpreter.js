@@ -118,6 +118,28 @@ describe('streamhub-permalink/uri-interpreter', function () {
       expect(parsed.environment).toBeUndefined();
       expect(parsed.network).toBe('livefyre.com');
     });
+
+    it('throws errors if invalid environments are provided', function () {
+      var hash1 = '?lf-content=108098985%3A259357490';
+      expect(function () {
+        uriInterpreter.parse(hash1);
+      }).not.toThrow();
+
+      var hash2 = '?lf-content=hack.com:108098985:259357490';
+      expect(function () {
+        uriInterpreter.parse(hash2);
+      }).toThrow();
+
+      var hash3 = '#lf-content=74579420:6bfc8fa440b841b4ba1a7c0952683a1c@heremedia-int-0.fyre.co';
+      expect(function () {
+        uriInterpreter.parse(hash3);
+      }).not.toThrow();
+
+      var hash4 = '#lf-content=hack.com/abc.php?abc:74579420:6bfc8fa440b841b4ba1a7c0952683a1c@heremedia-int-0.fyre.co';
+      expect(function () {
+        uriInterpreter.parse(hash4);
+      }).toThrow();
+    });
   });
 
   describe('.getContentPermalink()', function () {
@@ -145,6 +167,41 @@ describe('streamhub-permalink/uri-interpreter', function () {
 
     it('returns undefined when there isn\'t a "lf-content" field', function () {
         expect(uriInterpreter.getContentPermalink()).toBeUndefined();
+    });
+  });
+
+  describe('.isNetworkValid', function () {
+    it('returns a boolean as to whether the network does not end with livefyre.com / fyre.co', function () {
+      var isValid1 = uriInterpreter.isNetworkValid('exploit.com');
+      expect(isValid1).toBe(false);
+
+      var isValid2 = uriInterpreter.isNetworkValid('somenetwork.fyre.co');
+      expect(isValid2).toBe(true);
+
+      var isValid3 = uriInterpreter.isNetworkValid('livefyre.com');
+      expect(isValid3).toBe(true);
+
+      var isValid4 = uriInterpreter.isNetworkValid('livefyre.com.ca');
+      expect(isValid4).toBe(false);
+
+      var isValid5 = uriInterpreter.isNetworkValid('hack.fyre.co2');
+      expect(isValid5).toBe(false);
+    });
+  });
+
+  describe('.isEnvironmentValid', function () {
+    it('returns a boolean as to whether the env does not match Livefyre valid env format', function () {
+      var isValid1 = uriInterpreter.isEnvironmentValid('exploit.com');
+      expect(isValid1).toBe(false);
+
+      var isValid2 = uriInterpreter.isEnvironmentValid('somenetwork.fyre.co');
+      expect(isValid2).toBe(false);
+
+      var isValid3 = uriInterpreter.isEnvironmentValid('qa-ext.livefyre.com');
+      expect(isValid3).toBe(true);
+
+      var isValid4 = uriInterpreter.isEnvironmentValid('hurray.livefyre.com');
+      expect(isValid4).toBe(true);
     });
   });
 });

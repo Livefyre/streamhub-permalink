@@ -4,17 +4,21 @@ module.exports = function(config) {
     basePath: '..',
     frameworks: ['jasmine', 'cajon'],
     files: [
-      { pattern: 'requirejs.conf.js', included: true },
+      'requirejs.conf.js',
+      'lib/streamhub-sdk/tests/lib/function.bind.js',
+      { pattern: 'package.json', included: false },
+      { pattern: 'src/css/*', included: false },
       { pattern: 'src/**/*.js', included: false },
       { pattern: 'lib/**/*.js', included: false },
-      'tests/spec/*.js',
-      { pattern: 'tests/spec-list.js', included: false },
-      { pattern: 'tests/tests-main.js', included: false }
+      { pattern: 'lib/**/*.mustache', included: false },
+      { pattern: 'tests/spec/*.js', included: false },
+
+      { pattern: 'lib/streamhub-sdk/src/css/*', included: false },
+      'tests/tests-main.js'
     ],
     browsers: ['PhantomJS'],
     singleRun: true,
-    reporters: ['progress', 'coverage'],
-    preprocessors: { 'spec/*.js': ['coverage'] }
+    reporters: ['progress', 'coverage']
   });
 };
 

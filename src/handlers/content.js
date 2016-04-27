@@ -1,6 +1,7 @@
 'use strict'
 
 var fetchContent = require('streamhub-sdk/content/fetch-content');
+var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 
 /**
  * Handles permalinks for content.
@@ -24,7 +25,18 @@ var contentHandler = function (permalink, key, contentInfo, callback) {
         collectionId: collectionId,
         network: network
     };
-    environment && (opts.environment = environment);
+
+    if (environment) {
+        opts.environment = environment;
+
+        if (!uriInterpreter.isEnvironmentValid(environment)) {
+            throw new Error('Invalid environment: ' + environment);
+        }
+    }
+
+    if (!uriInterpreter.isNetworkValid(network)) {
+        throw new Error('Invalid network: ' + network);
+    }
 
     fetchContent(opts, handler);
 
