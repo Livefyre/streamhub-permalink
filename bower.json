@@ -1,6 +1,6 @@
 {
   "name": "streamhub-permalink",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": [
     "./src/main.js"
   ],
@@ -12,7 +12,7 @@
     "purl": "git://github.com/allmarkedup/purl.git#~2.3",
     "auth": "git://github.com/Livefyre/auth.git",
     "auth-livefyre": "git://github.com/gobengo/auth-livefyre.git",
-    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#2.21.3",
+    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#2.23.4",
     "hogan": "3.0.0",
     "livefyre-package-attribute": "gobengo/livefyre-package-attribute",
     "mout": "0.9.1"
