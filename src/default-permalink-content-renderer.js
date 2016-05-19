@@ -21,8 +21,8 @@ var defaultPermalinkContentHandler = function (content) {
 
 
     var closeBtn = contentView.el.parentElement.parentElement.querySelector('.hub-modal-close');
-    closeBtn.className += ' permalink-modal-close';
-    closeBtn.textContent = 'X';
+    closeBtn.className += ' permalink-modal-close fycon-x';
+    closeBtn.innerHTML = '';
     contentView.$el.css('max-width', '640px');//Necessary evil, until CSS things are sorted
     contentView.$el.addClass(defaultPermalinkContentHandler.CLASSES.PERMALINK);
     contentView.$el.find('.content-footer').append('\
