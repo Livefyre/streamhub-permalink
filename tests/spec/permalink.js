@@ -6,6 +6,7 @@ var Permalink = require('streamhub-permalink/permalink');
 var util = require('streamhub-sdk/util');
 
 var mockApp = {"author": null, "createdAt": 1487716473723.0, "description": null, "elements": [{"component": {"capabilities": ["details", "settings", "stream", "designer"], "configSchema": {}, "hasAuth": true, "hasCollection": true, "hasUrl": false, "icons": [{"src": "fycon-icon-wall", "type": "fycon"}], "id": "58a501b9170e241b3d00202b", "isHiddenS1": false, "main": "streamhub-wall", "name": "streamhub-wall", "streamType": "threaded", "urn": "urn:livefyre:service=designer:component=media-wall", "version": "5.0.4"}, "config": {"collection": {"articleId": "designer-app-1487716472761", "environment": "qa-ext.livefyre.com", "id": "2634430", "network": "studio-qa-1.fyre.co", "siteId": 290656, "title": "unofficialmanman mw #2", "type": "threaded", "url": "https://designer-app.livefyre.com/app/1487716472761"}, "environment": "qa", "network": "studio-qa-1.fyre.co", "siteId": 290656, "type": "threaded"}, "id": "0"}], "id": "58acc079fa5edab63f004110", "name": null, "previousVersion": null, "title": "unofficialmanman mw #2", "updatedAt": 1487716473723.0, "version": "0"};
+var mockApp2 = {"author": null, "createdAt": 1487722591914.0, "description": null, "elements": [{"component": {"capabilities": ["details", "settings", "stream", "designer"], "configSchema": {}, "hasAuth": true, "hasCollection": true, "hasUrl": false, "icons": [{"src": "fycon-icon-wall", "type": "fycon"}], "id": "58a646fe182a05f71700012b", "isHiddenS1": false, "main": "streamhub-wall", "name": "streamhub-wall", "streamType": "threaded", "urn": "urn:livefyre:service=designer:component=media-wall", "version": "5.0.4"}, "config": {"appName": "1c2f760b-0d6d-4349-833f-05937614774e", "buttonActiveBackgroundColor": "#cccccc", "buttonBorderColor": "rgba(0,0,0,0.3)", "buttonHoverBackgroundColor": "#f2f2f2", "buttonTextColor": "#666666", "cardBackgroundColor": "#fff", "collection": {"articleId": "designer-app-1487722590502", "environment": "t402.livefyre.com", "id": "75738870", "network": "studio-uat-1.fyre.co", "objectMode": true, "siteId": 306244, "title": "FB Public Feed Multi-Image Test", "url": "http://designer-app.livefyre.com/app/1487722590502"}, "environment": "staging", "fontFamily": "Georgia, Times, \"Times New Roman\", serif", "fontSize": "medium", "footerTextColor": "#b2b2b2", "forceButtonRender": true, "inDesigner": true, "inShare": false, "initial": 10, "linkAttachmentBackgroundColor": "#f2f2f2", "linkAttachmentBorderColor": "rgba(0,0,0,0.3)", "linkAttachmentTextColor": "#666666", "linkColor": "#0F98EC", "modal": true, "sampleData": false, "textColor": "#4c4c4c"}, "id": "0"}], "id": "58b4a3ab6a17847a40001def", "name": null, "previousVersion": null, "title": "FB Public Feed Multi-Image Test", "updatedAt": 1488233386717.0, "version": "3"};
 
 describe('streamhub-permalink/permalink', function () {
     it('is a constructor that extends Event-Emitter', function () {
@@ -16,6 +17,9 @@ describe('streamhub-permalink/permalink', function () {
     it('able to get a network from an app', function () {
         var network = Permalink.getNetworkFromApp(mockApp);
         expect(network).toBe('studio-qa-1.fyre.co');
+
+        network = Permalink.getNetworkFromApp(mockApp2);
+        expect(network).toBe('studio-uat-1.fyre.co');
 
         var badApp = {"elements": []};
         var network = Permalink.getNetworkFromApp(badApp);
