@@ -4,8 +4,7 @@ var enums = require('streamhub-permalink/enums');
 var EventEmitter = require('event-emitter');
 var get = require('mout/object/get');
 var inherits = require('inherits');
-var log = require('streamhub-sdk/debug')
-        ('streamhub-permalink');
+var log = require('streamhub-sdk/debug')('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 var util = require('streamhub-sdk/util');
 var bind = require('mout/function/bind');
@@ -30,11 +29,17 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
+        // Storify 2 post permalinks should never be opened in the modal.
         if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
-            return; //Storify 2 post permalinks should never be opened in the modal
+            return;
         }
 
         addEvent(msgEvent, bind(this.onPostMessage, this, content), false);
+
+        // If an app has loaded already, waiting for a post message would never
+        // work, so continue processing the permalink.
+        var appsLoaded = (window.Livefyre.events || {}).appsLoaded || [];
+        appsLoaded.length && this.processPermalink(appsLoaded[0], content);
     }
 };
 inherits(Permalink, EventEmitter);
@@ -52,14 +57,33 @@ Permalink.getNetworkFromApp = function (app) {
     return null;
 };
 
+/**
+ * Process the permalink if there is an associated network. Ensures the network
+ * is properly validated when fetching the permalink from the server. This
+ * protects us from showing content from showing content from network A on
+ * network B.
+ *
+ * NOTE: This currently only supports app-embed.
+ *
+ * @param {Object} data - App data to verify.
+ * @param {Object} content - Content to show in the permalink.
+ */
+Permalink.prototype.processPermalink = function(data, content) {
+    var network = Permalink.getNetworkFromApp(data);
+    if (network) {
+        content.network = network;
+        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+    }
+};
+
 Permalink.prototype.onPostMessage = function(content, event){
     var msg = null;
 
     if (typeof event.data === 'object') {
-        msg = event.data
+        msg = event.data;
     } else {
         try {
-            msg = JSON.parse(event.data)
+            msg = JSON.parse(event.data);
         } catch (e) {
             // failure can occur on messages that just send normal strings
             // or maleformed JSON, so just return.
@@ -68,13 +92,7 @@ Permalink.prototype.onPostMessage = function(content, event){
     }
 
     if (msg.event === 'livefyre.appLoaded' && msg.data) {
-        // Load the code to parse, fetch, and display content
-        var network = Permalink.getNetworkFromApp(msg.data);
-        if (network) {
-            content.network = network;
-            require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
-        }
-        return;
+        return this.processPermalink(msg.data, content);
     }
 
     //Return if the message isn't for me
@@ -82,7 +100,7 @@ Permalink.prototype.onPostMessage = function(content, event){
         return;
     }
 
-    this.recieveAppRegistration(msg.data)
+    this.recieveAppRegistration(msg.data);
 };
 
 Permalink.prototype.recieveAppRegistration = function(data){
@@ -174,13 +192,13 @@ Permalink.prototype._handlers = {};
  */
 Permalink.prototype.set = function (key, item) {
     if (!key || typeof(item) === 'undefined') {
-        throw new Error('Attempted to ._set without key or item');
+        console.warn('Attempted to ._set without key or item');
         return;
     }
 
     var exists = this._warehouse[key];
     if (exists) {
-        throw new Error('Attemped to overide an existing key, ' + key);
+        console.warn('Attemped to overide an existing key, ' + key);
         return;
     }
 
