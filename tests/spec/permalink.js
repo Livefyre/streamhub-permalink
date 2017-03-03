@@ -5,10 +5,21 @@ var EventEmitter = require('event-emitter');
 var Permalink = require('streamhub-permalink/permalink');
 var util = require('streamhub-sdk/util');
 
+var mockApp = {"author": null, "createdAt": 1487716473723.0, "description": null, "elements": [{"component": {"capabilities": ["details", "settings", "stream", "designer"], "configSchema": {}, "hasAuth": true, "hasCollection": true, "hasUrl": false, "icons": [{"src": "fycon-icon-wall", "type": "fycon"}], "id": "58a501b9170e241b3d00202b", "isHiddenS1": false, "main": "streamhub-wall", "name": "streamhub-wall", "streamType": "threaded", "urn": "urn:livefyre:service=designer:component=media-wall", "version": "5.0.4"}, "config": {"collection": {"articleId": "designer-app-1487716472761", "environment": "qa-ext.livefyre.com", "id": "2634430", "network": "studio-qa-1.fyre.co", "siteId": 290656, "title": "unofficialmanman mw #2", "type": "threaded", "url": "https://designer-app.livefyre.com/app/1487716472761"}, "environment": "qa", "network": "studio-qa-1.fyre.co", "siteId": 290656, "type": "threaded"}, "id": "0"}], "id": "58acc079fa5edab63f004110", "name": null, "previousVersion": null, "title": "unofficialmanman mw #2", "updatedAt": 1487716473723.0, "version": "0"};
+
 describe('streamhub-permalink/permalink', function () {
     it('is a constructor that extends Event-Emitter', function () {
         var pl = new Permalink();
         expect(pl instanceof EventEmitter).toBe(true);
+    });
+
+    it('able to get a network from an app', function () {
+        var network = Permalink.getNetworkFromApp(mockApp);
+        expect(network).toBe('studio-qa-1.fyre.co');
+
+        var badApp = {"elements": []};
+        var network = Permalink.getNetworkFromApp(badApp);
+        expect(network).toBe(null);
     });
 
     describe('when constructed', function () {
@@ -52,7 +63,7 @@ describe('streamhub-permalink/permalink', function () {
                 }
             );
         });
-        
+
         xit('can ._set() an item in the warehouse using a key', function () {
             expect(pl._warehouse[key]).toBeUndefined();
 
@@ -60,7 +71,7 @@ describe('streamhub-permalink/permalink', function () {
 
             expect(pl._warehouse[key]).toBe(content);
         });
-        
+
         it('throws if you try to ._set() without a key or item', function () {
             expect(function () {
                 pl._set();
@@ -72,11 +83,11 @@ describe('streamhub-permalink/permalink', function () {
                 pl._set(undefined, content);
             }).toThrow();
         });
-        
+
         xit('logs if the warehouse already has an item for the key that you tried to ._set()', function () {
             throw 'TODO (joao) Implement this!';
         });
-        
+
         xit('emits the key name when ._set(), but not the item', function () {
             var spy = jasmine.createSpy('set key event');
             pl.once(key, spy);
@@ -86,7 +97,7 @@ describe('streamhub-permalink/permalink', function () {
             expect(spy).toHaveBeenCalled();
             expect(spy).not.toHaveBeenCalledWith(content);
         });
-        
+
         xit('calls the default handler for a ._set() key, so long as it hasn\'t been .preventDefault\'d', function () {
             var spy = jasmine.createSpy('default handler');
             pl.default(key, spy);
@@ -95,7 +106,7 @@ describe('streamhub-permalink/permalink', function () {
 
             expect(spy).toHaveBeenCalledWith(content);
         });
-        
+
         xit('can be .preventDefault()\'d from executing a default handler for a key, whether or not a handler has been specified', function () {
             var spy = jasmine.createSpy('default handler');
             pl.default(key, spy);
@@ -105,25 +116,25 @@ describe('streamhub-permalink/permalink', function () {
 
             expect(spy).not.toHaveBeenCalled();
         });
-        
+
         xit('logs and returns early if you try to .preventDefault() it without specifying a key', function () {
             throw 'TODO (joao) Implement this!';
         });
-        
+
         xit('.get()\'s an item by key and returns undefined when the key doesn\'t exist', function () {
             pl._set(key, content);
 
             expect(pl.get(key)).toBe(content);
             expect(pl.get('FAKE')).toBeUndefined();
         });
-        
+
         it('can set a .default() handler function for a key', function () {
             var spy = jasmine.createSpy();
             pl.default(key, spy);
 
             expect(pl._handlers[key].fn).toBe(spy);
         });
-        
+
         it('can set a .default() handler with context and args provided', function () {
             var spy = jasmine.createSpy();
             var args = [spy, 23];
@@ -133,7 +144,7 @@ describe('streamhub-permalink/permalink', function () {
             expect(pl._handlers[key].context).toBe(spy);
             expect(pl._handlers[key].args).toBe(args);
         });
-        
+
         xit('logs when you attempt to set a .default() without a key or function', function () {
             throw 'TODO (joao) Implement this!';
         });
@@ -143,14 +154,14 @@ describe('streamhub-permalink/permalink', function () {
                 xit('can ._getContent() with a collectionId and contentId', function () {
 
                     pl._getConent('12345', '67890');
-                    
+
                     throw 'TODO (joao) Implement this!';
                 });
-                
+
                 xit('._getContentHandler() to ._set() content', function () {
                     throw 'TODO (joao) Implement this!';
                 });
-                
+
                 xit('._getContentHandler() handles an error', function () {
                     throw 'TODO (joao) Implement this!';
                 });
