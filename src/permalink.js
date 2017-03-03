@@ -46,7 +46,7 @@ inherits(Permalink, EventEmitter);
 Permalink.getNetworkFromApp = function (app) {
     var elements = app.elements;
     if (elements && elements.length) {
-        var network = get(elements[0], 'config.network');
+        var network = get(elements[0], 'config.network') || get(elements[0], 'config.collection.network');
         return network || null;
     }
     return null;
