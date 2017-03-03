@@ -3,8 +3,7 @@
 var enums = require('streamhub-permalink/enums');
 var EventEmitter = require('event-emitter');
 var inherits = require('inherits');
-var log = require('streamhub-sdk/debug')
-        ('streamhub-permalink');
+var log = require('streamhub-sdk/debug')('streamhub-permalink');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 var util = require('streamhub-sdk/util');
 var bind = require('mout/function/bind');
@@ -22,86 +21,88 @@ var bind = require('mout/function/bind');
  * @extends {EventEmitter}
  */
 var Permalink = function () {
-    EventEmitter.call(this);
-    var msgEvent = window.addEventListener ? 'message' : 'onmessage';
-    var addEvent = window.addEventListener || window.attachEvent;
+  EventEmitter.call(this);
+  var msgEvent = window.addEventListener ? 'message' : 'onmessage';
+  var addEvent = window.addEventListener || window.attachEvent;
 
-    //Check for content permalink
-    var content = uriInterpreter.getContentPermalink();
-    if (content) {
-        if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
-            return; //Storify 2 post permalinks should never be opened in the modal
-        }
-        
-        addEvent(msgEvent, bind(this.onPostMessage, this), false);
-        //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+  // Check for content permalink
+  var content = uriInterpreter.getContentPermalink();
+  if (content) {
+    if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
+      return; // Storify 2 post permalinks should never be opened in the modal
     }
+
+    addEvent(msgEvent, bind(this.onPostMessage, this), false);
+    // Load the code to parse, fetch, and display content
+    require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+  }
 };
 inherits(Permalink, EventEmitter);
 
+Permalink.prototype.onPostMessage = function (event){
+  var msg = null;
 
-Permalink.prototype.onPostMessage = function(event){
-    var msg = null; 
-
-    if(typeof event.data === 'object') 
-        msg = event.data 
-    else {
-        try{ 
-            msg = JSON.parse(event.data)
-        } catch(e){ 
-            //failure can occur on messages that just send normal strings
-            //or maleformed JSON, so just return.
-            return; 
-        }       
+  if (typeof event.data === 'object') {
+    msg = event.data;
+  } else {
+    try {
+      msg = JSON.parse(event.data);
+    } catch (e){
+      // failure can occur on messages that just send normal strings
+      // or maleformed JSON, so just return.
+      return;
     }
+  }
 
-    //Return if the message isn't for me
-    if(msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') 
-        return;
-   
-    this.recieveAppRegistration(msg.data)
+  // Return if the message isn't for me
+  if (msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') {
+    return;
+  }
+
+  this.recieveAppRegistration(msg.data);
 };
 
-Permalink.prototype.recieveAppRegistration = function(data){
-    var self = this;
-    //Only perform work if the app is related to the content in me (if I have any)
-    var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS); 
-    var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
-    var contentId = contentOptions && contentOptions.contentId ? contentOptions.contentId : null;
-    if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
-        return;
+Permalink.prototype.recieveAppRegistration = function (data){
+  var self = this;
+  // Only perform work if the app is related to the content in me (if I have any)
+  var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS);
+  var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
+  var contentId = contentOptions && contentOptions.contentId ? contentOptions.contentId : null;
+  if (!contentOptions || !collectionId || data.collectionId !== collectionId) {
+    return;
+  }
 
-    data.contentId = contentId;
-    var button = this.modalView.el.querySelector('.permalink-button');
+  data.contentId = contentId;
+  var button = this.modalView.el.querySelector('.permalink-button');
 
-    var hasShow = button.className.indexOf('show');
-    if(hasShow < 0)
-        button.className += ' show';
-    button.onclick = function(){
-        self.modalView.hide();
-        self.messageHubToPermalink(data);
-    };
+  var hasShow = button.className.indexOf('show');
+  if (hasShow < 0) {
+    button.className += ' show';
+  }
+  button.onclick = function (){
+    self.modalView.hide();
+    self.messageHubToPermalink(data);
+  };
 };
 
-Permalink.prototype.messageHubToPermalink = function(data){
-    var msg = {
-        from: 'permalink-modal',
-        to: 'permalink',
-        action: 'put',
-        data: data
-    };
-    window.postMessage(JSON.stringify(msg),'*');
+Permalink.prototype.messageHubToPermalink = function (data){
+  var msg = {
+    from: 'permalink-modal',
+    to: 'permalink',
+    action: 'put',
+    data: data
+  };
+  window.postMessage(JSON.stringify(msg),'*');
 };
 
-Permalink.prototype.sendRegistration = function(){
-    var msg = {
-        from: 'permalink-modal',
-        to: 'permalink',
-        action: 'post',
-        data: this.get(enums.KEYS.CONTENT_OPTIONS)
-    };
-    window.postMessage(JSON.stringify(msg),'*');
+Permalink.prototype.sendRegistration = function (){
+  var msg = {
+    from: 'permalink-modal',
+    to: 'permalink',
+    action: 'post',
+    data: this.get(enums.KEYS.CONTENT_OPTIONS)
+  };
+  window.postMessage(JSON.stringify(msg),'*');
 };
 
 /**
@@ -129,14 +130,14 @@ Permalink.prototype._warehouse = {};
  * @param [args] {Array=}
  * @return {!DefaultHandler}
   */
- Permalink.prototype._generateDefaultHandler = function (fn, context, args) {
-    return {
-        prevented: false,
-        fn: fn || util.nullFunction,
-        context: context || this,
-        args: args || []
-    }
- };
+Permalink.prototype._generateDefaultHandler = function (fn, context, args) {
+  return {
+    prevented: false,
+    fn: fn || util.nullFunction,
+    context: context || this,
+    args: args || []
+  };
+};
 
 /**
  * A place for storing the default item handlers.
@@ -151,26 +152,24 @@ Permalink.prototype._handlers = {};
  * @param item {!*} The item to be stored in the warehouse
  */
 Permalink.prototype.set = function (key, item) {
-    if (!key || typeof(item) === 'undefined') {
-        throw new Error('Attempted to ._set without key or item');
-        return;
-    }
+  if (!key || typeof (item) === 'undefined') {
+    throw new Error('Attempted to ._set without key or item');
+  }
 
-    var exists = this._warehouse[key];
-    if (exists) {
-        throw new Error('Attemped to overide an existing key, ' + key);
-        return;
-    }
+  var exists = this._warehouse[key];
+  if (exists) {
+    throw new Error('Attemped to overide an existing key, ' + key);
+  }
 
-    //Set the item in the warehouse
-    this._warehouse[key] = item;
+  // Set the item in the warehouse
+  this._warehouse[key] = item;
 
-    //Emit the key, but not the item. Force the listener to use Permalink.get(key);
-    this.emit(key);
+  // Emit the key, but not the item. Force the listener to use Permalink.get(key);
+  this.emit(key);
 
-    //If default handler exists and hasn't been prevented, execute it.
-    var dh = this._handlers[key];
-    dh && !dh.prevent && dh.fn.apply(dh.context, [item].concat(dh.args));
+  // If default handler exists and hasn't been prevented, execute it.
+  var dh = this._handlers[key];
+  dh && !dh.prevent && dh.fn.apply(dh.context, [item].concat(dh.args));
 };
 
 /**
@@ -179,17 +178,17 @@ Permalink.prototype.set = function (key, item) {
  * @param key {!string} The key to prevent.
  */
 Permalink.prototype.preventDefault = function (key) {
-    if (!key) {
-        log('Attempted to .prevent without key');
-        return;
-    }
+  if (!key) {
+    log('Attempted to .prevent without key');
+    return;
+  }
 
-    var dh = this._handlers[key];
-    if (!dh) {
-        dh = this._generateDefaultHandler();
-        this._handlers[key] = dh;
-    }
-    dh.prevent = true;
+  var dh = this._handlers[key];
+  if (!dh) {
+    dh = this._generateDefaultHandler();
+    this._handlers[key] = dh;
+  }
+  dh.prevent = true;
 };
 
 /**
@@ -198,7 +197,7 @@ Permalink.prototype.preventDefault = function (key) {
  * @returns {*=} The item in the warehouse or undefined.
  */
 Permalink.prototype.get = function (key) {
-    return key && this._warehouse[key];
+  return key && this._warehouse[key];
 };
 
 /**
@@ -211,14 +210,14 @@ Permalink.prototype.get = function (key) {
  * @returns {!DefaultHandler} The DefaultHandler object stored in ._handlers
  */
 Permalink.prototype.default = function (key, fn, context, args) {
-    if (!key || !fn) {
-        log('Attempted to .default without key or function');
-        return this._generateDefaultHandler();
-    }
+  if (!key || !fn) {
+    log('Attempted to .default without key or function');
+    return this._generateDefaultHandler();
+  }
 
-    var dh = this._generateDefaultHandler(fn, context, args);
-    this._handlers[key] = dh;
-    return dh;
+  var dh = this._generateDefaultHandler(fn, context, args);
+  this._handlers[key] = dh;
+  return dh;
 };
 
 module.exports = Permalink;

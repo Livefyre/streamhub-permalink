@@ -5,10 +5,10 @@ var uriInterpreter = require('streamhub-permalink/uri-interpreter');
 describe('streamhub-permalink/uri-interpreter', function () {
   describe('.parse', function () {
     it('returns falsy when there isn\'t a "lf-content" field', function () {
-      var hashes = ['', '#', '#asdf', 'asdf']
+      var hashes = ['', '#', '#asdf', 'asdf'];
       hashes.forEach(function (hash) {
         expect(uriInterpreter.parse(hash)).toBeFalsy();
-      })
+      });
     });
 
     it('properly parses livefyre permalink hashes and query params', function () {
@@ -30,7 +30,7 @@ describe('streamhub-permalink/uri-interpreter', function () {
         expect(parsed.contentId).toBe('259357490');
         expect(parsed.environment).toBeUndefined();
         expect(parsed.network).toBe('livefyre.com');
-      })
+      });
     });
 
     it('properly parses livefyre permalink hashes for sidenotes Content', function () {
@@ -52,7 +52,7 @@ describe('streamhub-permalink/uri-interpreter', function () {
         expect(parsed.contentId).toBe('5d1d7c5bbcae4d9da656c00e8354a08c@livefyre.com');
         expect(parsed.environment).toBeUndefined();
         expect(parsed.network).toBe('livefyre.com');
-      })
+      });
     });
 
     it('would properly parse permalink hashes if included an environment segment', function () {
@@ -76,7 +76,7 @@ describe('streamhub-permalink/uri-interpreter', function () {
         expect(parsed.contentId).toBe('259357490');
         expect(parsed.environment).toBe('t402.livefyre.com');
         expect(parsed.network).toBe('livefyre.com');
-      })
+      });
     });
 
     it('uses custom network if present on permalink url', function () {
@@ -166,7 +166,7 @@ describe('streamhub-permalink/uri-interpreter', function () {
     });
 
     it('returns undefined when there isn\'t a "lf-content" field', function () {
-        expect(uriInterpreter.getContentPermalink()).toBeUndefined();
+      expect(uriInterpreter.getContentPermalink()).toBeUndefined();
     });
   });
 

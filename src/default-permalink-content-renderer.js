@@ -1,41 +1,41 @@
-'use strict'
+'use strict';
 
 var Modal = require('streamhub-sdk/modal');
 var permalinkViewFactory = require('streamhub-permalink/permalink-view-factory');
-var styles = require('css!./css/styles.css');
-var sdkStyles = require('css!streamhub-sdk/css/style.css');
+require('css!./css/styles.css');
+require('css!streamhub-sdk/css/style.css');
 var packageAttribute = require('./package-attribute');
 
 var defaultPermalinkContentHandler = function (content) {
-    //Get the view for the content
-    var cvf = permalinkViewFactory();
-    var contentView = cvf.createContentView(content, {
-        sharer: { canShare: function() {} }
-    });
+  // Get the view for the content
+  var cvf = permalinkViewFactory();
+  var contentView = cvf.createContentView(content, {
+    sharer: {canShare: function () {}}
+  });
 
-    //Show the contentView in a modal
-    var contentModalView = new Modal();
+  // Show the contentView in a modal
+  var contentModalView = new Modal();
 
-    packageAttribute.decorateModal(contentModalView);
-    contentModalView.show(contentView, true);
+  packageAttribute.decorateModal(contentModalView);
+  contentModalView.show(contentView, true);
 
 
-    var closeBtn = contentView.el.parentElement.parentElement.querySelector('.hub-modal-close');
-    closeBtn.className += ' permalink-modal-close fycon-x';
-    closeBtn.innerHTML = '';
-    contentView.$el.css('max-width', '640px');//Necessary evil, until CSS things are sorted
-    contentView.$el.addClass(defaultPermalinkContentHandler.CLASSES.PERMALINK);
-    contentView.$el.find('.content-footer').append('\
-        <div class="hub-modal-content-permalink">\
-            <button class="permalink-button" type="button">View Context</button>\
-        </div>\
-    ');
+  var closeBtn = contentView.el.parentElement.parentElement.querySelector('.hub-modal-close');
+  closeBtn.className += ' permalink-modal-close fycon-x';
+  closeBtn.innerHTML = '';
+  contentView.$el.css('max-width', '640px'); // Necessary evil, until CSS things are sorted
+  contentView.$el.addClass(defaultPermalinkContentHandler.CLASSES.PERMALINK);
+  contentView.$el.find('.content-footer').append('\
+    <div class="hub-modal-content-permalink">\
+      <button class="permalink-button" type="button">View Context</button>\
+    </div>\
+  ');
 
-    this.modalView = contentModalView;
+  this.modalView = contentModalView;
 };
 
 defaultPermalinkContentHandler.CLASSES = {
-    PERMALINK: 'permalink-content'
+  PERMALINK: 'permalink-content'
 };
 
 module.exports = defaultPermalinkContentHandler;

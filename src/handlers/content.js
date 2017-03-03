@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var fetchContent = require('streamhub-sdk/content/fetch-content');
 var uriInterpreter = require('streamhub-permalink/uri-interpreter');
@@ -13,49 +13,47 @@ var uriInterpreter = require('streamhub-permalink/uri-interpreter');
  * @param [contentInfo.environment] {string=} For environments other than production
  */
 var contentHandler = function (permalink, key, contentInfo, callback) {
-    var contentId = contentInfo.contentId,
-        collectionId = contentInfo.collectionId,
-        environment = contentInfo.environment,
-        network = contentInfo.network,
-        collection,
-        opts;
+  var contentId = contentInfo.contentId,
+    collectionId = contentInfo.collectionId,
+    environment = contentInfo.environment,
+    network = contentInfo.network,
+    opts;
 
-    opts = {
-        contentId: contentId,
-        collectionId: collectionId,
-        network: network
-    };
+  opts = {
+    contentId: contentId,
+    collectionId: collectionId,
+    network: network
+  };
 
-    if (environment) {
-        opts.environment = environment;
+  if (environment) {
+    opts.environment = environment;
 
-        if (!uriInterpreter.isEnvironmentValid(environment)) {
-            throw new Error('Invalid environment: ' + environment);
-        }
+    if (!uriInterpreter.isEnvironmentValid(environment)) {
+      throw new Error('Invalid environment: ' + environment);
+    }
+  }
+
+  if (!uriInterpreter.isNetworkValid(network)) {
+    throw new Error('Invalid network: ' + network);
+  }
+
+  fetchContent(opts, handler);
+
+  /**
+   * Recieves content and sets it and a handler on the Permalink instance.
+   * @param [err] {*=}
+   * @param [content] {Content=} Content instance
+   */
+  function handler(err, content) {
+    if (err) {
+      throw new Error('Error fetching permalink content: ' + err);
     }
 
-    if (!uriInterpreter.isNetworkValid(network)) {
-        throw new Error('Invalid network: ' + network);
-    }
-
-    fetchContent(opts, handler);
-
-    /**
-     * Recieves content and sets it and a handler on the Permalink instance.
-     * @param [err] {*=}
-     * @param [content] {Content=} Content instance
-     */
-    function handler(err, content) {
-        if (err) {
-            throw new Error('Error fetching permalink content: ' + err);
-            return;
-        }
-
-        permalink.set('content-options', opts);
-        permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'));
-        permalink.set(key, content);
-        callback();
-    }
+    permalink.set('content-options', opts);
+    permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'));
+    permalink.set(key, content);
+    callback();
+  }
 };
 
 module.exports = contentHandler;

@@ -4,20 +4,20 @@
     almond: 'lib/almond/almond'
   },
   baseUrl: '..',
-  name: "streamhub-permalink",
+  name: 'streamhub-permalink',
   include: [
     'almond',
     'streamhub-permalink/default-permalink-content-renderer'
   ],
   stubModules: ['text', 'hgn', 'json'],
-  out: "../dist/streamhub-permalink.min.js",
+  out: '../dist/streamhub-permalink.min.js',
   buildCSS: true,
   separateCSS: true,
   pragmasOnSave: {
     excludeHogan: true
   },
   cjsTranslate: true,
-  optimize: "none",
+  optimize: 'none',
   preserveLicenseComments: false,
   uglify2: {
     compress: {
@@ -30,12 +30,12 @@
     startFile: 'wrap-start.frag',
     endFile: 'wrap-end.frag'
   },
-  onBuildRead: function(moduleName, path, contents) {
+  onBuildRead: function (moduleName, path, contents) {
     switch (moduleName) {
-      case "jquery":
+      case 'jquery':
       // case "base64":
-        contents = "define([], function(require, exports, module) {" + contents + "});";
+        contents = 'define([], function(require, exports, module) {' + contents + '});';
     }
     return contents;
   }
-})
+});
