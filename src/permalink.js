@@ -2,6 +2,7 @@
 
 var enums = require('streamhub-permalink/enums');
 var EventEmitter = require('event-emitter');
+var get = require('mout/object/get');
 var inherits = require('inherits');
 var log = require('streamhub-sdk/debug')
         ('streamhub-permalink');
@@ -32,44 +33,65 @@ var Permalink = function () {
         if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
             return; //Storify 2 post permalinks should never be opened in the modal
         }
-        
-        addEvent(msgEvent, bind(this.onPostMessage, this), false);
-        //Load the code to parse, fetch, and display content
-        require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+
+        addEvent(msgEvent, bind(this.onPostMessage, this, content), false);
     }
 };
 inherits(Permalink, EventEmitter);
 
+/**
+ * @param {Object} app
+ * @return {string|null}
+ */
+Permalink.getNetworkFromApp = function (app) {
+    var elements = app.elements;
+    if (elements && elements.length) {
+        var network = get(elements[0], 'config.network');
+        return network || null;
+    }
+    return null;
+};
 
-Permalink.prototype.onPostMessage = function(event){
-    var msg = null; 
+Permalink.prototype.onPostMessage = function(content, event){
+    var msg = null;
 
-    if(typeof event.data === 'object') 
-        msg = event.data 
-    else {
-        try{ 
+    if (typeof event.data === 'object') {
+        msg = event.data
+    } else {
+        try {
             msg = JSON.parse(event.data)
-        } catch(e){ 
-            //failure can occur on messages that just send normal strings
-            //or maleformed JSON, so just return.
-            return; 
-        }       
+        } catch (e) {
+            // failure can occur on messages that just send normal strings
+            // or maleformed JSON, so just return.
+            return;
+        }
+    }
+
+    if (msg.event === 'livefyre.appLoaded' && msg.data) {
+        // Load the code to parse, fetch, and display content
+        var network = Permalink.getNetworkFromApp(msg.data);
+        if (network) {
+            content.network = network;
+            require('streamhub-permalink/handlers/content')(this, enums.KEYS.CONTENT, content, bind(this.sendRegistration, this));
+        }
+        return;
     }
 
     //Return if the message isn't for me
-    if(msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') 
+    if (msg.to !== 'permalink-modal' || !msg.data || msg.action !== 'post') {
         return;
-   
+    }
+
     this.recieveAppRegistration(msg.data)
 };
 
 Permalink.prototype.recieveAppRegistration = function(data){
     var self = this;
     //Only perform work if the app is related to the content in me (if I have any)
-    var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS); 
+    var contentOptions = this.get(enums.KEYS.CONTENT_OPTIONS);
     var collectionId = contentOptions && contentOptions.collectionId ? contentOptions.collectionId : null;
     var contentId = contentOptions && contentOptions.contentId ? contentOptions.contentId : null;
-    if(!contentOptions || !collectionId || data.collectionId !== collectionId) 
+    if(!contentOptions || !collectionId || data.collectionId !== collectionId)
         return;
 
     data.contentId = contentId;
