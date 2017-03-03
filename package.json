@@ -25,7 +25,7 @@
     "hint": "./node_modules/jshint/bin/jshint src/ tests/spec; echo",
     "jsdoc": "rm -rf docs/api && ./node_modules/jsdoc/jsdoc README.md -c tools/jsdoc.conf.json",
     "karma": "./node_modules/karma/bin/karma start tools/karma.conf.js",
-    "lessc": "./node_modules/less/bin/lessc -ru --verbose --compress src/css/styles.{less,css}",
+    "lessc": "./node_modules/less/bin/lessc -ru --verbose --compress src/css/styles.less > src/css/styles.css",
     "postinstall": "./node_modules/bower/bin/bower install",
     "send-to-coveralls": "find coverage -name 'lcov.info' -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
     "start": "./node_modules/http-server/bin/http-server .",
