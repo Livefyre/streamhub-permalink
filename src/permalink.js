@@ -29,16 +29,17 @@ var Permalink = function () {
     //Check for content permalink
     var content = uriInterpreter.getContentPermalink();
     if (content) {
+        // Storify 2 post permalinks should never be opened in the modal.
         if (content.contentId && content.contentId.indexOf('lb-post') >= 0)  {
-            return; //Storify 2 post permalinks should never be opened in the modal
+            return;
         }
 
         addEvent(msgEvent, bind(this.onPostMessage, this, content), false);
 
-        // If the app has loaded already, waiting for a post message would never
+        // If an app has loaded already, waiting for a post message would never
         // work, so continue processing the permalink.
-        var appLoadedData = window.Livefyre.appLoaded;
-        appLoadedData && this.processPermalink(appLoadedData, content);
+        var appsLoaded = (window.Livefyre.events || {}).appsLoaded || [];
+        appsLoaded.length && this.processPermalink(appsLoaded[0], content);
     }
 };
 inherits(Permalink, EventEmitter);
