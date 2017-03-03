@@ -46,6 +46,7 @@
     "karma-requirejs": "0.2.0",
     "karma-script-launcher": "0.1.0",
     "lfcdn": "git+ssh://git@github.com:Livefyre/lfcdn.git",
+    "phantomjs": "~1.9.2-2",
     "requirejs": "2.1.9",
     "rework": "git://github.com/gobengo/rework.git"
   }
