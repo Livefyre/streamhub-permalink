@@ -21,9 +21,7 @@ test:
 	npm test
 
 clean:
-	rm -rf node_modules
-	rm -rf lib
-	rm -rf dist
+	rm -rf dist lib node_modules
 
 package: build
 
