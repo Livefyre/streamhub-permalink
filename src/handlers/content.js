@@ -52,7 +52,9 @@ var contentHandler = function (permalink, key, contentInfo, callback) {
         }
 
         permalink.set('content-options', opts);
-        permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'));
+        permalink.default(key, require('streamhub-permalink/default-permalink-content-renderer'), null, {
+            doNotTrack: permalink._doNotTrack
+        });
         permalink.set(key, content);
         callback();
     }
