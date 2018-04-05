@@ -41,6 +41,11 @@ var Permalink = function () {
         var appsLoaded = (window.Livefyre.events || {}).appsLoaded || [];
         appsLoaded.length && this.processPermalink(appsLoaded[0], content);
     }
+
+    /**
+     * Handle the Do Not Track functionality.
+     */
+    this.handleDoNotTrack();
 };
 inherits(Permalink, EventEmitter);
 
@@ -55,6 +60,37 @@ Permalink.getNetworkFromApp = function (app) {
         return network || null;
     }
     return null;
+};
+
+/**
+ * If the user has requested not to be tracked by web sites, content, or
+ * advertising. There are different levels:
+ *   Browser setting: Disables passive tracking like video cookies, livecount, etc.
+ *   JS variable: Disables auth, removes cookies, etc.
+ * @type {function}
+ */
+Permalink.prototype.handleDoNotTrack = function () {
+    var Livefyre = window.Livefyre || {};
+    var optOutEnabled = Livefyre.userPrivacyOptOut;
+    this._doNotTrack = {
+        browser: optOutEnabled || window.navigator.doNotTrack === '1',
+        delegate: Livefyre.doNotTrackDelegate,
+        optOut: optOutEnabled
+    };
+
+    // Don't need to set twitter meta if only the browser option is set because
+    // they will handle that themselves.
+    if (!optOutEnabled) {
+        return;
+    }
+
+    // Set up meta tag for twitter DNT support if it doesn't already exist.
+    if (!$('meta[name="twitter:dnt"]').length) {
+        var meta = document.createElement('meta');
+        meta.name = 'twitter:dnt';
+        meta.content = 'on';
+        document.head.appendChild(meta);
+    }
 };
 
 /**
