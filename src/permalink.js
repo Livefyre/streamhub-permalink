@@ -74,8 +74,9 @@ Permalink.prototype.handleDoNotTrack = function () {
     var optOutEnabled = Livefyre.userPrivacyOptOut;
     this._doNotTrack = {
         browser: optOutEnabled || window.navigator.doNotTrack === '1',
-        delegate: Livefyre.doNotTrackDelegate,
-        optOut: optOutEnabled
+        delegate: Livefyre.userPrivacyMaskDelegate,
+        optOut: optOutEnabled,
+        whitelist: Livefyre.userPrivacyVideoWhitelist || []
     };
 
     // Don't need to set twitter meta if only the browser option is set because
