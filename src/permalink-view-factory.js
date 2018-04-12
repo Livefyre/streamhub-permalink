@@ -43,7 +43,7 @@ var permalinkViewFactory = function (opts) {
             var oembed = content.attachments[0];
 
             // If we shouldn't show the mask, stop processing.
-            if (!MediaMask.shouldShowMask(oembed, opts.doNotTrack.browser)) {
+            if (!MediaMask.shouldShowMask(oembed, opts.doNotTrack.browser, opts.doNotTrack.whitelist)) {
                 // Need to ensure that click event on the attachment view gets
                 // triggered if the video is played, then closed, then it needs
                 // to play again.
