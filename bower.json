@@ -1,6 +1,6 @@
 {
   "name": "streamhub-permalink",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "main": [
     "./src/main.js"
   ],
@@ -15,7 +15,7 @@
     "mout": "0.9.1",
     "purl": "git://github.com/allmarkedup/purl.git#~2.3",
     "requirejs-hogan-plugin": "*",
-    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#~2.31.3"
+    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#~2.37.17"
   },
   "devDependencies": {
     "almond": "~0.2.5",
