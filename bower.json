@@ -1,12 +1,12 @@
 {
   "name": "streamhub-permalink",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "main": [
     "./src/main.js"
   ],
   "dependencies": {
     "auth": "git://github.com/Livefyre/auth.git",
-    "auth-livefyre": "git://github.com/gobengo/auth-livefyre.git",
+    "livefyre-auth": "git://github.com/livefyre/livefyre-auth.git",
     "base64": "git://github.com/ross-pfahler/Base64.js#~0.3.3",
     "cajon": "git://github.com/requirejs/cajon.git#~0.1.11",
     "hogan": "3.0.0",
@@ -15,7 +15,7 @@
     "mout": "0.9.1",
     "purl": "git://github.com/allmarkedup/purl.git#~2.3",
     "requirejs-hogan-plugin": "*",
-    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#~2.37.17"
+    "streamhub-sdk": "git://github.com/Livefyre/streamhub-sdk.git#~2.37.18"
   },
   "devDependencies": {
     "almond": "~0.2.5",
@@ -26,7 +26,7 @@
     "rework": "git://github.com/gobengo/rework.git#~0.21.1"
   },
   "resolutions": {
-    "auth": "~0.2",
+    "auth": "~0.4.2",
     "base64": "~0.4.0",
     "event-emitter": "0.1",
     "livefyre-bootstrap": "1.4.19",
@@ -36,7 +36,7 @@
     "rework": "~0.21.1",
     "cajon": "~0.1.12",
     "streamhub-ui": "0.4.6",
-    "streamhub-sdk": "2.37.17",
+    "streamhub-sdk": "2.37.18",
     "streamhub-share": "0.5.2"
   }
 }
