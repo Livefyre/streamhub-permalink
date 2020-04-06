@@ -6,7 +6,7 @@
     "name": "Joao Martins",
     "email": "joao@livefyre.com"
   },
-  "version": "0.6.3",
+  "version": "0.6.4",
   "dependencies": {
     "bower": "1.3.8",
     "cajon": "0.1.11",
@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "coveralls": "~2.3.0",
-    "jsdoc": "git://github.com/jsdoc/jsdoc.git#3.6.3",
-    "jshint": "~2.1.0",
+    "jsdoc": "3.6.3",
+    "jshint": "2.9.7",
     "karma": "0.10.5",
     "karma-cajon": "*",
     "karma-chrome-launcher": "0.1.0",
